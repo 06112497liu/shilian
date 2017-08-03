@@ -8,7 +8,7 @@
         <relativePath>shilian-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>reddata</artifactId>
+    <artifactId>shilian</artifactId>
     <packaging>pom</packaging>
 
     <modules>
