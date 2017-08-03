@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.statistics.AbnormalStatisticsDao">
+
+    <!-- 异常企业数量 -->
+    <select id="selectAbnormalCount" resultType="int">
+        SELECT
+        COUNT(nbxh)
+        FROM
+        bbd_enterprise_info
+        WHERE abnormal_state > 0
+        <if test="district != null and district != '5201'">
+            and district = #{district}
+        </if>
+    </select>
+
+    <select id="queryPartialAbnormalCount" resultType="int">
+        select
+        count(nbxh)
+        from bbd_enterprise_info
+        where (abnormal_state div #{abnormalState}) mod 2 = 1
+        <if test="district != null and district != '5201'">
+            and district = #{district}
+        </if>
+    </select>
+
+    <select id="queryAbnormalCompanyDistribute"
+            resultType="com.bbd.bean.statistics.CompanyAddrStaticInfo">
+        SELECT district as name, COUNT(1) as value, district as code
+        FROM bbd_enterprise_info
+        WHERE 
+        (abnormal_state div #{abnormalState}) mod 2 = 1
+        GROUP BY district
+        ORDER BY COUNT(1) DESC
+    </select>
+
+    <select id="queryAbnormalIndustryDistribute"
+            resultType="com.bbd.bean.statistics.NameValueInfo">
+        SELECT primary_industry_initial as name, COUNT(1) as value
+        FROM bbd_enterprise_info
+        WHERE (abnormal_state div #{abnormalState}) mod 2 = 1
+        AND primary_industry_initial IS NOT NULL
+        <if test="district != null and district != '5201'">
+            and district = #{district}
+        </if>
+        GROUP BY primary_industry_initial
+        ORDER BY COUNT(1) DESC
+    </select>
+
+    <select id="queryAbnormalPropertyDistribute"
+            resultType="com.bbd.bean.statistics.NameValueInfo">
+        SELECT company_property as name, COUNT(1) as value
+        FROM bbd_enterprise_info
+        WHERE (abnormal_state div #{abnormalState}) mod 2 = 1 
+        <if test="district != null and district != '5201'">
+            and district = #{district}
+        </if>
+        GROUP BY company_property
+        ORDER BY COUNT(1) DESC
+    </select>
+
+    <select id="queryAbnormalYearRemoveCount" resultType="int">
+        SELECT COUNT(1) FROM bbd_abnormal_info a, bbd_enterprise_info c
+        WHERE 
+        a.nbxh=c.nbxh 
+        AND YEAR(gmt_delete) = #{year}
+        <if test="district != null and district != '5201'">
+            and c.district = #{district}
+        </if>
+        <if test="abnormalState != null">
+            and (c.abnormal_state div #{abnormalState}) mod 2 = 1
+        </if>
+    </select>
+
+    <select id="queryAbnormalMonthRemoveCount" resultType="int">
+        SELECT COUNT(1) FROM bbd_abnormal_info a, bbd_enterprise_info c
+        WHERE a.nbxh=c.nbxh AND YEAR(gmt_delete) = #{year} AND MONTH(gmt_delete)=#{month}
+        <if test="district != null and district != '5201'">
+            and c.district = #{district}
+        </if>
+        <if test="abnormalState != null">
+            and (c.abnormal_state div #{abnormalState}) mod 2 = 1
+        </if>
+    </select>
+    
+    <select id="queryAbnormalMonthAddCount" resultType="int">
+        SELECT COUNT(1) FROM bbd_abnormal_info a, bbd_enterprise_info c
+        WHERE a.nbxh=c.nbxh AND YEAR(gmt_checkin) = #{year} AND MONTH(gmt_checkin)=#{month}
+        AND a.delete_flag = 0
+        <if test="district != null and district != '5201'">
+            and c.district = #{district}
+        </if>
+        <if test="abnormalState != null">
+            and (c.abnormal_state div #{abnormalState}) mod 2 = 1
+        </if>
+    </select>
+</mapper>

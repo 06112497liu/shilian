@@ -51,8 +51,7 @@
         </property>
         <property name="mapperLocations">
             <list>
-                <value>classpath*:com/bbd/**/dao/*.xml</value>
-                <value>classpath*:mapper/*.xml</value>
+                <value>classpath*:mapper/**/*.xml</value>
             </list>
         </property>
     </bean>

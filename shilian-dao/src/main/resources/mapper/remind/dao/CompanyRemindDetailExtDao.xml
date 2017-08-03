@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.remind.CompanyRemindDetailExtDao">
+
+    <insert id="insertDailyRemindCount">
+        INSERT INTO bbd_company_remind_daily_count(`type`, `day`, `year`, `count`, `district`, `gmt_create`)
+        SELECT d.type, #{day}, #{year}, COUNT(DISTINCT nbxh) `count`, d.district, NOW()
+        FROM bbd_company_remind_detail d
+        WHERE d.send_year = #{year} AND d.send_day=#{day}
+        GROUP BY d.type, d.district
+    </insert>
+
+    <delete id="deleteDailyRemindByDay">
+        delete from bbd_company_remind_daily_count
+        where year = #{year} and day = #{day}
+    </delete>
+
+    <insert id="insertMonthlyRemindCount">
+        INSERT INTO bbd_company_remind_monthly_count(`type`, `month`, `year`, `count`, `district`, `gmt_create`)
+        SELECT d.type, #{month}, #{year}, COUNT(DISTINCT nbxh) `count`, d.district, NOW()
+        FROM bbd_company_remind_detail d
+        WHERE d.send_year = #{year} AND d.send_month=#{month}
+        GROUP BY d.type, d.district
+    </insert>
+
+    <delete id="deleteMonthlyRemindByMonth">
+		delete from bbd_company_remind_monthly_count
+        where `year` = #{year} and `month` = #{month}
+    </delete>
+
+
+</mapper>

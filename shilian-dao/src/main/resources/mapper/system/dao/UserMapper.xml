@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.system.UserDao">
+
+    <sql id="FilterSql">
+        <choose>
+            <when test="type == 4">
+            </when>
+            <when test="type == 3">
+                and u.province = #{addr}
+            </when>
+            <when test="type == 2">
+                and u.city = #{addr}
+            </when>
+            <when test="type == 1">
+                and u.district = #{addr}
+            </when>
+            <otherwise>
+                and 1 != 1
+            </otherwise>
+        </choose>
+    </sql>
+
+    <!-- 添加一个用户 -->
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.bbd.bean.system.User">
+		INSERT INTO bbd_user (
+			`username`,
+			`name`,
+			`mobile`,
+			`password`,
+			`type`,
+			`province`,
+			`city`,
+			`district`,
+			`gtm_create`
+		)
+		VALUES
+			(
+				#{username},
+				#{name},
+				#{mobile},
+				#{password},
+				#{type},
+				#{province},
+				#{city},
+				#{district},
+				now()
+			)
+	</insert>
+
+    <!-- 逻辑删除一个 -->
+    <update id="deleteUserById" parameterType="int">
+		UPDATE `bbd_user` SET `delete_flag`='1' WHERE (`id`= #{id})
+	</update>
+
+    <!-- 修改用户 -->
+    <update id="updateUser" parameterType="com.bbd.bean.system.User">
+        UPDATE `bbd_user`
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="province != null">
+                province = #{province},
+            </if>
+            <if test="city != null">
+                city = #{city},
+            </if>
+            <if test="district != null">
+                district = #{district},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <!-- 			<if test="role != null"> -->
+            <!-- 				role = #{role}, -->
+            <!-- 			</if> -->
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 修改用户状态  -->
+    <update id="updateUserStatus">
+		UPDATE `bbd_user` SET `status`= #{status} WHERE (`id`= #{id})
+	</update>
+
+    <!-- 查询用户是否重复 -->
+    <select id="selectRepeatCount" parameterType="com.bbd.bean.system.User" resultType="_long">
+        select count(id) from bbd_user
+        where
+        (username = #{username} or mobile = #{mobile})
+        and delete_flag = 0
+        <if test="id != null">
+            and id != #{id}
+        </if>
+    </select>
+
+    <!-- 查询用户是否重复 -->
+    <select id="selectRepeatUser" parameterType="com.bbd.bean.system.User"
+            resultType="com.bbd.bean.system.User">
+        select id, username, mobile from bbd_user
+        where
+        (username = #{username} or mobile = #{mobile})
+        and delete_flag = 0
+        <if test="id != null">
+            and id != #{id}
+        </if>
+        limit 1
+    </select>
+
+    <!-- 查询用户信息 -->
+    <select id="selectUserInfos" parameterType="com.bbd.bean.query.BaseQuery"
+            resultType="com.bbd.bean.system.UserInfo">
+        SELECT
+        u.id,
+        u.username,
+        u.`name`,
+        <!-- 			u.role, -->
+        u.mobile,
+        u.`status`,
+        p.name as provinceName,
+        c.name as cityName,
+        d.name as districtName
+        FROM
+        bbd_user u
+        left join bbd_province p on p.code = u.province
+        left join bbd_city c on c.code = u.city
+        left join bbd_district d on d.code = u.district
+        where
+        u.delete_flag = 0
+        <include refid="FilterSql"/>
+    </select>
+
+    <!-- 查询用户数量根据权限 -->
+    <select id="selectUserCount" parameterType="com.bbd.bean.query.BaseQuery" resultType="_long">
+        SELECT
+        count(id)
+        FROM
+        bbd_user u
+        where
+        u.delete_flag = 0
+        <include refid="FilterSql"/>
+    </select>
+
+    <!-- 真分页查询用户 -->
+    <select id="selectUserInfoPage" resultType="com.bbd.bean.system.UserInfo">
+        SELECT
+        u.id,
+        u.username,
+        u.`name`,
+        <!-- 			u.role, -->
+        u.mobile,
+        u.`status`,
+        p.name as provinceName,
+        c.name as cityName,
+        d.name as districtName
+        FROM
+        bbd_user u
+        left join bbd_province p on p.code = u.province
+        left join bbd_city c on c.code = u.city
+        left join bbd_district d on d.code = u.district
+        where
+        u.delete_flag = 0
+        <choose>
+            <when test="query.type == 4">
+            </when>
+            <when test="query.type == 3">
+                and u.province = #{query.addr}
+            </when>
+            <when test="query.type == 2">
+                and u.city = #{query.addr}
+            </when>
+            <when test="query.type == 1">
+                and u.district = #{query.addr}
+            </when>
+            <otherwise>
+                and 1 != 1
+            </otherwise>
+        </choose>
+        limit #{limit}, #{offset}
+    </select>
+
+    <resultMap type="com.bbd.bean.system.LoginUserInfo" id="LoginUserInfoMap" autoMapping="true">
+        <id property="id" column="id"/>
+        <association property="province" javaType="com.bbd.bean.statistics.NameValueInfo">
+            <id property="value" column="p_code" javaType="int"/>
+            <result property="name" column="p_name" javaType="string"/>
+        </association>
+        <association property="city" javaType="com.bbd.bean.statistics.NameValueInfo">
+            <id property="value" column="c_code" javaType="int"/>
+            <result property="name" column="c_name" javaType="string"/>
+        </association>
+        <association property="district" javaType="com.bbd.bean.statistics.NameValueInfo">
+            <id property="value" column="d_code" javaType="int"/>
+            <result property="name" column="d_name" javaType="string"/>
+        </association>
+    </resultMap>
+    <!-- 根据账户查询用户信息 -->
+    <select id="selectLoginUserInfoByAccount" parameterType="java.lang.String" resultMap="LoginUserInfoMap">
+		select 
+			u.id,
+			u.username,
+			u.password,
+			u.role,
+			u.mobile,
+			u.`status`,
+			u.`name`,
+			u.type,
+			p.code p_code,
+			p.name p_name,
+			c.code c_code,
+			c.name c_name,
+			d.code d_code,
+			d.name d_name
+		FROM
+			bbd_user u
+		left join bbd_province p on p.code = u.province
+		left join bbd_city c on c.code = u.city
+		left join bbd_district d on d.code = u.district
+		where u.delete_flag = 0
+		and (u.username = #{account} or u.mobile = #{account})
+	</select>
+
+    <!-- 根据用户id查询用户的角色和模块 -->
+    <select id="selectUserModuleInfos" parameterType="int"
+            resultType="com.bbd.bean.system.ModuleInfo">
+		SELECT
+			m.id,
+			m.name,
+			m.resource
+		FROM
+			bbd_module m
+		LEFT JOIN bbd_user_module um on um.module_id = m.id
+		LEFT JOIN bbd_user u on u.id = um.user_id
+		where
+		u.id = #{id}
+		and u.delete_flag = 0
+	</select>
+
+    <!-- 删除用户和模块的关联关系 -->
+    <select id="deleteUserModuleShip" parameterType="int">
+		delete from bbd_user_module 
+		where user_id = #{id}
+	</select>
+
+    <!-- 删除用户和模块的关联关系 -->
+    <select id="insertUserModuleShip" parameterType="com.bbd.bean.system.User">
+        insert into bbd_user_module
+        (user_id, module_id)
+        values
+        <foreach collection="modules" item="module" separator=",">
+            (#{id}, #{module.id})
+        </foreach>
+    </select>
+
+</mapper>

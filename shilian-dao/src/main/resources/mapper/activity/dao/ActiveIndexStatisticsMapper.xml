@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.activity.ActiveIndexStatisticsDao">
+
+    <!-- 企业类型sql片段 -->
+    <sql id="company_state_sql">
+        <if test="company_state != null">
+            <if test="company_state == 0">
+                AND ms.company_state = 0
+            </if>
+            <if test="company_state > 0">
+                AND (ms.company_state div #{company_state}) mod 2 = 1
+            </if>
+        </if>
+    </sql>
+
+	<!-- 查询某年的经营活动指数趋势 -->
+	<select id="selectActivityIndexTrend" resultType="com.bbd.bean.statistics.NameValueInfo">
+        SELECT
+        ms.activity_month as name,
+        FORMAT(AVG(ms.activity_exponent), 2) AS value
+        FROM
+        bbd_business_month_statistics ms
+        WHERE 1=1
+        AND ms.activity_year = #{year}
+        <if test="companyRegisterFrom != null">
+            AND ms.gmt_company_register &gt;= #{companyRegisterFrom}
+        </if>
+        <if test="companyRegisterTo != null">
+            AND ms.gmt_company_register &lt;= #{companyRegisterTo}
+        </if>
+        <if test="areaCode != null and areaCode != 5201">
+            AND ms.district = #{areaCode}
+        </if>
+        <if test="primaryIndustry != null">
+            AND ms.primary_industry = #{primaryIndustry}
+        </if>
+        <if test="companyProperties != null">
+            AND ms.company_property in
+            <foreach collection="companyProperties" item="c" open="(" close=")" separator=",">
+                ${c}
+            </foreach>
+        </if>
+        <include refid="company_state_sql"/>
+        GROUP BY ms.activity_month 
+	</select>
+
+    <select id="selectDormancyTrend" resultType="com.bbd.bean.statistics.NameValueInfo">
+        SELECT
+        ms.activity_month as name,
+        truncate(SUM(IF(activity_exponent=0,1,0))/COUNT(id)*100,2) as value
+        FROM
+        bbd_business_month_statistics ms
+        WHERE 1=1
+        AND ms.activity_year = #{year}
+        <if test="companyRegisterFrom != null">
+            AND ms.gmt_company_register &gt;= #{companyRegisterFrom}
+        </if>
+        <if test="companyRegisterTo != null">
+            AND ms.gmt_company_register &lt;= #{companyRegisterTo}
+        </if>
+        <if test="areaCode != null and areaCode != 5201">
+            AND ms.district = #{areaCode}
+        </if>
+        <if test="primaryIndustry != null">
+            AND ms.primary_industry = #{primaryIndustry}
+        </if>
+        <if test="companyProperties != null">
+            AND ms.company_property in
+            <foreach collection="companyProperties" item="c" open="(" close=")" separator=",">
+                ${c}
+            </foreach>
+        </if>
+        <include refid="company_state_sql"/>
+        GROUP BY ms.activity_month
+    </select>
+
+    <!-- 按年分组查询企业总数 -->
+    <select id="selectCountGruopByYear" resultType="com.bbd.bean.statistics.NameValueInfo">
+        SELECT t.activity_year as name, COUNT(1) as value FROM (
+        SELECT ms.activity_year, COUNT(1) FROM `bbd_business_month_statistics` ms
+        WHERE 1=1
+        <if test="companyRegisterFrom != null">
+            AND ms.gmt_company_register &gt;= #{companyRegisterFrom}
+        </if>
+        <if test="companyRegisterTo != null">
+            AND ms.gmt_company_register &lt;= #{companyRegisterTo}
+        </if>
+        <if test="areaCode != null and areaCode != 5201">
+            AND ms.district = #{areaCode}
+        </if>
+        <if test="primaryIndustry != null">
+            AND ms.primary_industry = #{primaryIndustry}
+        </if>
+        <if test="companyProperties != null">
+            AND ms.company_property in
+            <foreach collection="companyProperties" item="c" open="(" close=")" separator=",">
+                ${c}
+            </foreach>
+        </if>
+        <include refid="company_state_sql"/>
+        GROUP BY ms.activity_year, ms.nbxh
+        ) t GROUP BY t.activity_year;
+    </select>
+
+    <!-- 按年分组查询休眠企业总数 -->
+    <select id="selectDormancyCountGruopByYear" resultType="com.bbd.bean.statistics.NameValueInfo">
+        SELECT t.activity_year as name, COUNT(1) as value FROM (
+        SELECT ms.activity_year, nbxh FROM `bbd_business_month_statistics` ms
+        WHERE 1=1
+        <if test="companyRegisterFrom != null">
+            AND ms.gmt_company_register &gt;= #{companyRegisterFrom}
+        </if>
+        <if test="companyRegisterTo != null">
+            AND ms.gmt_company_register &lt;= #{companyRegisterTo}
+        </if>
+        <if test="areaCode != null and areaCode != 5201">
+            AND ms.district = #{areaCode}
+        </if>
+        <if test="primaryIndustry != null">
+            AND ms.primary_industry = #{primaryIndustry}
+        </if>
+        <if test="companyProperties != null">
+            AND ms.company_property in
+            <foreach collection="companyProperties" item="c" open="(" close=")" separator=",">
+                ${c}
+            </foreach>
+        </if>
+        <include refid="company_state_sql"/>
+        GROUP BY ms.activity_year, ms.nbxh HAVING SUM(ms.activity_exponent)=0
+        ) t GROUP BY t.activity_year;
+    </select>
+
+    <!-- 企业经营活动指数分布 -->
+    <select id="selectBusinessActivityIndexGroup"
+            resultType="com.bbd.bean.statistics.NameValueNodeInfo">
+        SELECT
+        ms.activity_score_type as name,
+        count( ms.nbxh ) as value
+        FROM
+        bbd_business_month_statistics ms
+        WHERE
+        ms.activity_year = #{year}
+        AND ms.activity_month = #{month}
+        <if test="companyRegisterFrom != null">
+            AND ms.gmt_company_register &gt;= #{companyRegisterFrom}
+        </if>
+        <if test="companyRegisterTo != null">
+            AND ms.gmt_company_register &lt;= #{companyRegisterTo}
+        </if>
+        <if test="areaCode != null and areaCode != 5201">
+            AND ms.district = #{areaCode}
+        </if>
+        <if test="primaryIndustry != null">
+            AND ms.primary_industry = #{primaryIndustry}
+        </if>
+        <if test="companyProperties != null">
+            AND ms.company_property in
+            <foreach collection="companyProperties" item="c" open="(" close=")" separator=",">
+                ${c}
+            </foreach>
+        </if>
+        <include refid="company_state_sql"/>
+        GROUP BY ms.activity_score_type
+        ORDER BY ms.activity_score_type
+    </select>
+
+    <!-- 疑似休眠企业一级行业分布 -->
+    <select id="selectDormancyIndustry" resultType="com.bbd.bean.statistics.NameValueNodeInfo">
+        SELECT
+        primary_industry as name,
+        COUNT(1) as value
+        FROM
+        bbd_business_month_statistics ms
+        WHERE activity_year = #{year}
+        AND activity_month = #{month}
+        AND activity_exponent = 0
+        AND primary_industry IS NOT NULL
+        <if test="companyProperties != null">
+            AND ms.company_property in
+            <foreach collection="companyProperties" item="c" open="(" close=")" separator=",">
+                ${c}
+            </foreach>
+        </if>
+        <if test="areaCode != null and areaCode != 5201">
+            AND ms.district = #{areaCode}
+        </if>
+        <if test="companyRegisterFrom != null">
+            AND ms.gmt_company_register &gt;= #{companyRegisterFrom}
+        </if>
+        <if test="companyRegisterTo != null">
+            AND ms.gmt_company_register &lt;= #{companyRegisterTo}
+        </if>
+        <if test="primaryIndustry != null">
+            AND ms.primary_industry = #{primaryIndustry}
+        </if>
+        <include refid="company_state_sql"/>
+        GROUP BY primary_industry
+    </select>
+    
+    <!-- 获取疑似休眠企业各个一级行业的数量 -->
+    <select id="selectCompanyCountForIndustry" resultType="com.bbd.bean.statistics.NameValueInfo">
+        SELECT
+        primary_industry as name,
+        COUNT(1) as value
+        FROM
+        bbd_business_month_statistics ms
+        WHERE activity_year = #{year}
+        AND activity_month = #{month}
+        AND primary_industry IS NOT NULL
+        <if test="areaCode != null and areaCode != 5201">
+            AND ms.district = #{areaCode}
+        </if>
+        <include refid="company_state_sql"/>
+        GROUP BY primary_industry
+    </select>    
+
+    <!-- 疑似休眠企业区域分布 -->
+    <select id="selectDormancyArea" resultType="com.bbd.bean.statistics.NameValueNodeInfo">
+        SELECT
+        district as name,
+        COUNT(1) as value
+        FROM
+        bbd_business_month_statistics ms
+        WHERE activity_year = #{year}
+        AND activity_month = #{month}
+        AND activity_exponent = 0
+        <if test="companyProperties != null">
+            AND ms.company_property in
+            <foreach collection="companyProperties" item="c" open="(" close=")" separator=",">
+                ${c}
+            </foreach>
+        </if>
+        <if test="areaCode != null and areaCode != 5201">
+            AND ms.district = #{areaCode}
+        </if>
+        <if test="companyRegisterFrom != null">
+            AND ms.gmt_company_register &gt;= #{companyRegisterFrom}
+        </if>
+        <if test="companyRegisterTo != null">
+            AND ms.gmt_company_register &lt;= #{companyRegisterTo}
+        </if>
+        <if test="primaryIndustry != null">
+            AND ms.primary_industry = #{primaryIndustry}
+        </if>
+        <include refid="company_state_sql"/>
+        GROUP BY district
+        ORDER BY value ASC
+    </select>
+    <select id="selectCompanyTotal" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        bbd_enterprise_info
+        WHERE
+        1=1
+        <if test="district != 5201">
+            AND district = #{district}
+        </if>
+        <if test="companyState == 0">
+            AND company_state = 0
+        </if>
+        <if test="companyState > 0">
+            AND (company_state div #{companyState}) mod 2 = 1
+        </if>
+
+    </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

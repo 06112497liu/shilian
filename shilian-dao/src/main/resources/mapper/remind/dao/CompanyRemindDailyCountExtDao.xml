@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.remind.CompanyRemindDailyCountExtDao">
+
+    <select id="queryYearRemindCount" resultType="int">
+        SELECT count(distinct nbxh) FROM bbd_company_remind_detail
+        WHERE `send_year`= #{year} and `type` = #{type}
+        <if test="district != null">
+            and district = #{district}
+        </if>
+    </select>
+
+    <select id="queryMonthRemindCount" resultType="int">
+        SELECT count(distinct nbxh) FROM bbd_company_remind_detail
+        WHERE `send_year`= #{year} and `send_month` = #{month} and `type` = #{type}
+        <if test="district != null">
+            and district = #{district}
+        </if>
+    </select>
+
+
+</mapper>

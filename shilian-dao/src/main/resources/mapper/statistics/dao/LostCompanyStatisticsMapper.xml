@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bbd.dao.statistics.LostCompanyStatisticsDao">
+
+    <sql id="DistrictSql">
+        <where>
+            <choose>
+                <when test="type == 1">
+                    and i.district = #{addr}
+                </when>
+                <otherwise>
+                    and 1 = 1
+                </otherwise>
+            </choose>
+        </where>
+    </sql>
+
+    <!-- 查询失联企业的最后更新时间 -->
+    <select id="selectLostInfoLastUpdateTime" resultType="java.util.Date"
+            parameterType="com.bbd.bean.query.BaseQuery">
+        SELECT
+        MAX(i.gmt_create)
+        FROM
+        bbd_abnormal_info i,
+        bbd_company_type_mapping j
+        <include refid="DistrictSql"></include>
+        AND i.company_type = j.company_code
+        AND j.company_type IN (1, 2, 3)
+        AND i.type = 4
+    </select>
+
+</mapper>

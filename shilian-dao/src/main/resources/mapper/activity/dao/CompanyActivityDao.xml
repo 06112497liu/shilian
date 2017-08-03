@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.activity.CompanyActivityDao">
+
+    <!-- 创建企业月度经营指数记录 -->
+    <insert id="insertCompanyMonthStatistics">
+        INSERT INTO bbd_business_month_statistics (
+        nbxh,
+        district,
+        activity_exponent,
+        activity_score_type,
+        company_state,
+        primary_industry,
+        gmt_company_register,
+        company_property,
+        activity_year,
+        activity_month,
+        gmt_create
+        )
+        SELECT
+        bc.nbxh,
+        bc.district,
+        0 activity_exponent,
+        0 activity_score_type,
+        0 company_state,
+        primary_industry_initial,
+        DATE_FORMAT(
+        bc.gmt_company_register,
+        '%Y-%m-%d'
+        ) gmt_company_register,
+        bc.company_property company_property,
+        #{year},
+        #{month},
+        NOW() FROM bbd_company_info bc
+        WHERE bc.company_property IN (1, 2, 3)
+        AND bc.name_type IN ('2', '8')
+        AND LENGTH(bc.zsxzqh) IN (6, 8)
+        AND (bc.gmt_cancel is null or bc.gmt_cancel &gt;= STR_TO_DATE(CONCAT(#{year}, '-', #{month}, '-', 1),
+        '%Y-%m-%d'))
+        AND NOT EXISTS (
+        SELECT 1
+        FROM bbd_business_month_statistics m
+        WHERE m.activity_year=#{year}
+        AND m.activity_month=#{month}
+        AND m.nbxh=bc.nbxh
+        )
+    </insert>
+
+    <update id="updateLostState">
+        UPDATE bbd_business_month_statistics s, `bbd_abnormal_info` a
+        SET s.`company_state` = s.`company_state` + 1
+        WHERE s.nbxh = a.nbxh AND a.`type`=4 AND a.`delete_flag`=0 AND s.`activity_year`=#{year} AND
+        s.`activity_month`=#{month}
+    </update>
+
+    <update id="updateSuspendNotCancelState">
+        UPDATE bbd_business_month_statistics s, `bbd_company_info` c
+        SET s.`company_state` = s.`company_state` + 2
+        WHERE s.`activity_year`=#{year} AND s.`activity_month`=#{month} AND s.nbxh = c.nbxh AND c.`name_type`='8'
+    </update>
+
+    <update id="updateSeriousIllegal">
+        UPDATE bbd_business_month_statistics s, `bbd_company_info` c
+        SET s.`company_state` = s.`company_state` + 4
+        WHERE s.`activity_year`=#{year} AND s.`activity_month`=#{month} AND s.nbxh = c.nbxh AND (c.`company_state` div 4) mod 2 = 1
+    </update>
+
+    <update id="updateActivityExponentWithoutAnnual">
+        UPDATE
+        bbd_business_month_statistics r,
+        (SELECT
+        nbxh,
+        IF(
+        SUM(scoreTemp.score) > 100,
+        100,
+        SUM(scoreTemp.score)
+        ) total_score
+        FROM
+        (SELECT
+        nbxh,
+        content_type,
+        TRUNCATE(
+        (
+        1- TIMESTAMPDIFF(
+        MONTH,
+        STR_TO_DATE(CONCAT(YEAR(MAX(gmt_activity)), '-', MONTH(MAX(gmt_activity)), '-', 1), '%Y-%m-%d'),
+        STR_TO_DATE(
+        CONCAT(#{year}, '-', #{month}, '-', 1),
+        '%Y-%m-%d'
+        )) / 12
+        ) * bt.total_score * bt.weight,
+        2
+        ) score,
+        MAX(br.gmt_activity)
+        FROM
+        bbd_business_records br,
+        bbd_business_type bt
+        WHERE DATE_FORMAT(br.gmt_activity, '%Y-%m-%d') &lt; (STR_TO_DATE(
+        CONCAT(#{year}, '-', #{month}, '-', 1),
+        '%Y-%m-%d'
+        ) + INTERVAL 1 MONTH )
+        AND DATE_FORMAT(br.gmt_activity, '%Y-%m-%d') &gt;= STR_TO_DATE(
+        CONCAT(#{year}, '-', #{month}, '-', 1),
+        '%Y-%m-%d'
+        ) - INTERVAL 11 MONTH
+        AND br.content_type = bt.type
+        AND br.content_type IN (2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14)
+        GROUP BY br.nbxh,
+        br.content_type ) scoreTemp
+        GROUP BY scoreTemp.nbxh) temp
+        SET
+        r.activity_exponent = r.activity_exponent + IFNULL(temp.total_score, 0)
+        WHERE r.nbxh = temp.nbxh
+        AND r.activity_year = #{year}
+        AND r.activity_month = #{month}
+    </update>
+
+    <update id="updateActivityExponentByAnnual">
+        UPDATE
+        bbd_business_month_statistics m,
+        (SELECT
+        a.nbxh nbxh,
+        CASE
+        (#{year} - MAX(a.gmt_annual_year))
+        WHEN 1
+        THEN s.activity_exponent + 20
+        WHEN 2
+        THEN s.activity_exponent + 10
+        ELSE s.activity_exponent
+        END AS score
+        FROM
+        bbd_business_month_statistics s,
+        `bbd_annual_info` a
+        WHERE s.`activity_year` = #{year}
+        AND s.`activity_month` = #{month}
+        AND s.nbxh = a.nbxh
+        AND a.gmt_annual &lt; STR_TO_DATE(CONCAT(#{year}, '-', #{month}, '-', 1), '%Y-%m-%d') + INTERVAL 1 MONTH
+        GROUP BY a.nbxh) t
+        SET
+        m.`activity_exponent` = IF (t.score &gt; 100, 100, t.score)
+        WHERE m.nbxh = t.nbxh
+        AND m.`activity_year` = #{year}
+        AND m.`activity_month` = #{month}
+    </update>
+
+
+    <!-- 按月更新企业经营活动类型 -->
+    <update id="updateCompanyActivityType">
+        update bbd_business_month_statistics
+        set activity_score_type =( case when activity_exponent &gt; 60 then 3
+        when activity_exponent &gt; 30 and activity_exponent &lt;= 60 then 2
+        when activity_exponent &gt; 0 and activity_exponent &lt;= 30 then 1
+        else 0
+        END ) ,
+        gmt_modified=now()
+        where activity_year=#{year}
+        and activity_month=#{month}
+    </update>
+
+
+</mapper>

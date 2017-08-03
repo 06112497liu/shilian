@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.company.CompanyExtDao">
+    <resultMap id="BaseResultMap" type="com.bbd.domain.CompanyInfo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="district" jdbcType="VARCHAR" property="district"/>
+        <result column="phones" jdbcType="VARCHAR" property="phones"/>
+        <result column="emails" jdbcType="VARCHAR" property="emails"/>
+        <result column="company_credit_code" jdbcType="VARCHAR" property="companyCreditCode"/>
+        <result column="gmt_company_register" jdbcType="TIMESTAMP" property="gmtCompanyRegister"/>
+        <result column="primary_industry" jdbcType="VARCHAR" property="primaryIndustry"/>
+        <result column="primary_industry_initial" jdbcType="VARCHAR" property="primaryIndustryInitial"/>
+        <result column="gmt_approval" jdbcType="TIMESTAMP" property="gmtApproval"/>
+        <result column="gmt_cancel" jdbcType="TIMESTAMP" property="gmtCancel"/>
+        <result column="gmt_suspend" jdbcType="TIMESTAMP" property="gmtSuspend"/>
+        <result column="company_type" jdbcType="VARCHAR" property="companyType"/>
+        <result column="register_number" jdbcType="VARCHAR" property="registerNumber"/>
+        <result column="register_capital" jdbcType="REAL" property="registerCapital"/>
+        <result column="legal_person" jdbcType="VARCHAR" property="legalPerson"/>
+        <result column="register_authority" jdbcType="VARCHAR" property="registerAuthority"/>
+        <result column="register_status" jdbcType="VARCHAR" property="registerStatus"/>
+        <result column="operate_scope" jdbcType="VARCHAR" property="operateScope"/>
+        <result column="name_type" jdbcType="VARCHAR" property="nameType"/>
+        <result column="addr" jdbcType="VARCHAR" property="addr"/>
+        <result column="latitude" jdbcType="DOUBLE" property="latitude"/>
+        <result column="longitude" jdbcType="DOUBLE" property="longitude"/>
+        <result column="nbxh" jdbcType="VARCHAR" property="nbxh"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="company_property" jdbcType="TINYINT" property="companyProperty"/>
+        <result column="annual_state" jdbcType="TINYINT" property="annualState"/>
+        <result column="abnormal_state" jdbcType="TINYINT" property="abnormalState"/>
+        <result column="index_score" jdbcType="DOUBLE" property="indexScore"/>
+        <result column="annual_emails" jdbcType="VARCHAR" property="annualEmails"/>
+        <result column="annual_phones" jdbcType="VARCHAR" property="annualPhones"/>
+        
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, company_name, province, city, district, phones, emails, company_credit_code,
+        gmt_company_register, primary_industry, primary_industry_initial, gmt_approval, gmt_cancel, gmt_suspend, company_type,
+        register_number, register_capital, legal_person, register_authority, register_status,
+        operate_scope, name_type, addr, latitude, longitude, nbxh, create_time, update_time,
+        gmt_create, gmt_modified, company_property, annual_state, abnormal_state, index_score, annual_emails, annual_phones
+    </sql>
+
+    <select id="selectAbnormalCompanyInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bbd_enterprise_info
+        where (abnormal_state div #{abnormalState}) mod 2 = 1
+        <if test="companyName != null">
+            and company_name like #{companyName}
+        </if>
+        <if test="primaryIndustry != null">
+            and primary_industry_initial = #{primaryIndustry}
+        </if>
+        <if test="district != null and district != '5201'">
+            and district = #{district}
+        </if>
+        <if test="indexScoreFrom != null">
+            and index_score between #{indexScoreFrom} and #{indexScoreTo}
+        </if>
+    </select>
+
+    <resultMap id="lostCompanyMap" type="com.bbd.bean.company.LostCompanyInfoVO">
+        <result column="company_id" jdbcType="INTEGER" property="companyId"/>
+        <result column="nbxh" jdbcType="VARCHAR" property="nbxh"/>
+        <result column="company_credit_code" jdbcType="VARCHAR" property="companyCreditCode"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="district" jdbcType="VARCHAR" property="district"/>
+        <result column="addr" jdbcType="VARCHAR" property="addr"/>
+        <result column="primary_industry" jdbcType="VARCHAR" property="primaryIndustry"/>
+        <result column="company_property" jdbcType="TINYINT" property="companyProperty"/>
+        <result column="gmt_company_register" jdbcType="TIMESTAMP" property="gmtCompanyRegister"/>
+        <result column="gmt_checkin" jdbcType="TIMESTAMP" property="lostCheckInTime"/>
+    </resultMap>
+
+    <select id="queryLostCompany" resultMap="lostCompanyMap">
+        select
+        c.id company_id,
+        c.nbxh nbxh,
+        c.company_credit_code company_credit_code,
+        c.company_name company_name,
+        c.district district,
+        c.addr addr,
+        c.primary_industry_initial primary_industry,
+        c.company_property company_property,
+        c.gmt_company_register
+        gmt_company_register,
+        a.gmt_checkin gmt_checkin
+        from
+        bbd_enterprise_info c,
+        bbd_abnormal_info a
+        where
+        c.nbxh = a.nbxh
+        and a.type = 4
+        and a.delete_flag = 0
+        <if test="companyProperty != null">
+            and c.company_property = #{companyProperty}
+        </if>
+        <if test="companyName != null">
+            and c.company_name like #{companyName}
+        </if>
+        <if test="district != null and district != '5201'">
+            and c.district = #{district}
+        </if>
+        <if test="primaryIndustry != null">
+            and primary_industry_initial = #{primaryIndustry}
+        </if>
+        <if test="gmtCompanyRegisterFrom != null">
+            and DATE_FORMAT(c.gmt_company_register,'%Y-%m-%d') between DATE_FORMAT(#{gmtCompanyRegisterFrom},'%Y-%m-%d') and DATE_FORMAT(#{gmtCompanyRegisterTo},'%Y-%m-%d')
+        </if>
+        <if test="checkInFrom != null">
+            and DATE_FORMAT(a.gmt_checkin,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{checkInFrom},'%Y-%m-%d') and DATE_FORMAT(#{checkInTo},'%Y-%m-%d')
+        </if>
+
+    </select>
+
+    <select id="queryBusinessCompanyList" resultType="com.bbd.bean.company.CompanyBusinessInfoVO">
+        SELECT
+        c.id,
+        c.nbxh,
+        c.company_name as companyName,
+        c.district,
+        c.primary_industry_initial as primaryIndustryInitial,
+        c.index_score as indexScore,
+        c.business_records as businessType
+        FROM
+        bbd_enterprise_info c
+        WHERE 1=1
+        <if test="district != null and district != '5201'">
+            and c.district = #{district}
+        </if>
+        <if test="companyState != null and companyState == 0">
+            and c.company_state = 0
+        </if>
+        <if test="companyState != null and companyState != 0">
+            and (c.company_state div #{companyState}) mod 2 = 1
+        </if>
+        <if test="companyName != null">
+            and c.company_name like #{companyName}
+        </if>
+        <if test="primaryIndustry != null">
+            and substr(c.primary_industry, 1, 1) = #{primaryIndustry}
+        </if>
+        <if test="indexScoreFrom != null">
+            and c.index_score between #{indexScoreFrom} and #{indexScoreTo}
+        </if>
+    </select>
+
+	<!-- 更新企业经营活动记录 -->
+	<update id="updateCompanyBusinessRecord">
+		UPDATE bbd_enterprise_info e,
+		 bbd_business_month_statistics b
+		SET e.business_records = b.business_records
+		WHERE
+			e.nbxh = b.nbxh
+		AND b.activity_year = #{year}
+		AND b.activity_month = #{month}		
+	</update>
+
+    <!-- 企业地图散点 -->
+    <select id="selectAddressPointInfo" resultType="com.bbd.bean.biz.AddrPointInfo">
+        select company_name as companyName, addr as address, latitude as lat, longitude as lng
+        from bbd_enterprise_info
+        where 1=1
+        <if test="nbxh != null">
+            and nbxh != #{nbxh}
+        </if>
+        and district = #{district}
+        limit 100
+    </select>
+
+    <update id="updateCompanyIndexScore">
+        update bbd_enterprise_info c, bbd_business_month_statistics b
+        set c.index_score=b.activity_exponent
+        where c.nbxh=b.nbxh and b.activity_year=#{year} and b.activity_month=#{month}
+    </update>
+
+    <!-- 查询贵阳市各区域企业数量 -->
+    <select id="selectCompanyGroupByDistrict" resultType="com.bbd.bean.statistics.NameValueInfo">
+        SELECT district as name, count(1) as value
+        FROM bbd_enterprise_info
+        GROUP BY district
+    </select>
+
+    <!-- 查询贵阳市各区域应年报企业数量 -->
+    <select id="selectShouldAnnualCoutByDistrict" resultType="com.bbd.bean.statistics.NameValueInfo">
+        SELECT district as name, count(1) as value
+        FROM bbd_enterprise_info
+        WHERE 
+        annual_state != 0
+        GROUP BY district
+    </select>
+
+
+</mapper>
+
+
+
+
+
+
+

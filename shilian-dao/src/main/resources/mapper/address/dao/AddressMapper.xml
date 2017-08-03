@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.address.AddressDao">
+
+    <!-- 通用的返回map -->
+    <resultMap type="com.bbd.bean.statistics.NameValueInfo" id="SIMap">
+        <id property="name" column="code"/>
+        <result property="value" column="name"/>
+    </resultMap>
+
+    <!-- 查询所有的省 -->
+    <select id="selectAllProvinces" resultMap="SIMap">
+			select code,name from bbd_province
+		</select>
+
+    <!-- 查询省下的市-->
+    <select id="selectCitysByProvince" resultMap="SIMap" parameterType="int">
+			select code,name from bbd_city where up_code = #{code}
+		</select>
+
+    <!-- 查询市下的区-->
+    <select id="selectDistrictsByCity" resultMap="SIMap" parameterType="int">
+			select code,name from bbd_district where up_code = #{code}
+		</select>
+
+    <!-- 查询省-->
+    <select id="selectProvinceByCode" resultMap="SIMap" parameterType="int">
+			select code, name from bbd_province where code = #{code}
+		</select>
+
+    <!-- 市查询-->
+    <select id="selectCityByCode" resultMap="SIMap" parameterType="int">
+			select code, name from bbd_city where code = #{code}
+		</select>
+
+    <!-- 区查询-->
+    <select id="selectDistrictByCode" resultMap="SIMap" parameterType="int">
+			select code, name from bbd_district where code = #{code}
+		</select>
+
+    <!-- 查询地区的全名和全部区域代码 -->
+    <select id="selectFullDistrictByCode" resultMap="SIMap" parameterType="com.bbd.bean.query.BaseQuery">
+        select
+        concat( ifnull( p.code, 0 ), ifnull( c.code, 0 ), ifnull( d.code, 0 ) ) code,
+        concat( ifnull( p.name, '' ), ifnull( c.name, '' ), ifnull( d.name, '' ) ) name
+        from bbd_province p
+        left join bbd_city c on p.code = c.up_code
+        left join bbd_district d on c.code = d.up_code
+        <if test="_parameter != null">
+            <where>
+                <if test="type == 3">p.code = #{addr}</if>
+                <if test="type == 2">c.code = #{addr}</if>
+                <if test="type == 1">d.code = #{addr}</if>
+            </where>
+        </if>
+    </select>
+</mapper>

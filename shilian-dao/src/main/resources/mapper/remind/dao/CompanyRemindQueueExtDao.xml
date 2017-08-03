@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.remind.CompanyRemindQueueExtDao">
+
+    <insert id="generateAnnualCompanyRemindQueue" parameterType="map">
+        insert into bbd_company_remind_queue(nbxh, task_id, type, method, operate_type, plan_date, district, gmt_create)
+        select nbxh, #{taskId}, #{type}, #{method}, #{operateType}, #{planDate}, #{district}, now()
+        from bbd_enterprise_info
+        where annual_state = 2
+        <if test="companyName != null">
+            companyName like #{companyName}
+        </if>
+        <if test="primaryIndustry != null">
+            AND primary_industry_initial = #{primaryIndustry}
+        </if>
+        <if test="districtParam != null and districtParam != '5201'">
+            AND district = #{districtParam}
+        </if>
+        <if test="indexScoreFrom != null and indexScoreTo != null">
+            AND index_score BETWEEN #{indexScoreFrom} AND #{indexScoreTo}
+        </if>
+    </insert>
+
+    <insert id="generateAbnormalCompanyRemindQueue" parameterType="map">
+        insert into bbd_company_remind_queue(nbxh, task_id, type, method, operate_type, plan_date, district, gmt_create)
+        select nbxh, #{taskId}, #{type}, #{method}, #{operateType}, #{planDate}, #{district}, now()
+        from bbd_enterprise_info
+        where (abnormal_state div #{abnormalState}) mod 2 = 1
+        <if test="companyName != null">
+            companyName like #{companyName}
+        </if>
+        <if test="primaryIndustry != null">
+            AND primary_industry_initial = #{primaryIndustry}
+        </if>
+        <if test="districtParam != null and districtParam != '5201'">
+            AND district = #{districtParam}
+        </if>
+        <if test="indexScoreFrom != null and indexScoreTo != null">
+            AND index_score BETWEEN #{indexScoreFrom} AND #{indexScoreTo}
+        </if>
+    </insert>
+
+    <insert id="generateCompanyRemindQueueByNbxhs" parameterType="map">
+        insert into bbd_company_remind_queue(nbxh, task_id, type, method, operate_type, plan_date, district, gmt_create)
+        select nbxh, #{taskId}, #{type}, #{method}, #{operateType}, #{planDate}, #{district}, now()
+        from bbd_enterprise_info
+        where nbxh in
+        <foreach collection="nbxhs" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </insert>
+
+    <select id="getQueuedTaskRemindCompanyInfos" resultType="com.bbd.bean.remind.RemindCompany">
+        SELECT
+        queue.id queueId,
+        queue.task_id taskId,
+        queue.nbxh nbxh,
+        company.company_name companyName,
+        company.annual_emails emails,
+        company.annual_phones phones,
+        queue.method method,
+        queue.type TYPE,
+        queue.operate_type operateType,
+        queue.plan_date planDate,
+        queue.district district
+        FROM bbd_company_remind_queue queue, bbd_enterprise_info company
+        WHERE queue.task_id = #{taskId}
+        AND queue.nbxh=company.nbxh
+        limit 100
+    </select>
+
+    <select id="getCountByTaskId" resultType="java.lang.Integer">
+        select count(1) from bbd_company_remind_queue where task_id = #{taskId}
+    </select>
+
+</mapper>

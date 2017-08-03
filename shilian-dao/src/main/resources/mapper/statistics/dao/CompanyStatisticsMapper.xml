@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bbd.dao.statistics.CompanyStatisticsDao">
+    <sql id="FilterSql">
+        <where>
+            <choose>
+                <when test="type == 3">
+                    and i.province = #{addr}
+                </when>
+                <when test="type == 2">
+                    and i.city = #{addr}
+                </when>
+                <when test="type == 1">
+                    and i.district = #{addr}
+                </when>
+                <otherwise>
+                    and 1 != 1
+                </otherwise>
+            </choose>
+        </where>
+    </sql>
+
+    <!-- 查询当前信息挖掘条数 -->
+    <select id="getDataCount" resultType="_long">
+		SELECT SUM(dataCount) AS
+		dataCount FROM (
+		SELECT COUNT(nbxh) AS dataCount FROM bbd_abnormal_info
+		UNION ALL
+		SELECT COUNT(nbxh) AS dataCount FROM bbd_business_records
+		UNION ALL
+		SELECT COUNT(nbxh) AS dataCount FROM bbd_company_info
+		UNION ALL
+		SELECT COUNT(nbxh) AS dataCount FROM bbd_company_remind_detail
+		) t
+	</select>
+
+    <!-- 查询当前用户权限下的企业总数 -->
+    <select id="selectCompanyTotalCount" resultType="int">
+        select count(1) from
+        bbd_enterprise_info
+        where 1=1
+        <if test="district != null and district != '5201'">
+            and district = #{district}
+        </if>
+    </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

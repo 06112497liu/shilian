@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.statistics.AnnualStatisticsDao">
+
+    <sql id="FilterSql">
+        <where>
+            <choose>
+                <when test="type == 3">
+                    and i.province = #{addr}
+                </when>
+                <when test="type == 2">
+                    and i.city = #{addr}
+                </when>
+                <when test="type == 1">
+                    and i.district = #{addr}
+                </when>
+                <otherwise>
+                    and 1 != 1
+                </otherwise>
+            </choose>
+        </where>
+    </sql>
+
+
+    <!-- 已经年报的企业数量 -->
+    <select id="selectHaveAnnualCount" resultType="int">
+        SELECT
+        COUNT(nbxh)
+        FROM
+        bbd_enterprise_info
+        WHERE annual_state = 1
+        <if test="district != null and district != '5201'">
+            and district = #{district}
+        </if>
+    </select>
+
+    <!-- 当前应年报企业数量 -->
+    <select id="selectShouldAnnualCount" resultType="int">
+        SELECT
+        COUNT(nbxh)
+        FROM
+        bbd_enterprise_info
+        WHERE annual_state > 0
+        <if test="district != null and district != '5201'">
+            AND district = #{district}
+        </if>
+    </select>
+
+    <select id="selectUnannualedCount" resultType="int">
+        SELECT
+        COUNT(nbxh)
+        FROM
+        bbd_enterprise_info
+        WHERE annual_state = 2
+        <if test="district != null and district != '5201'">
+            AND district = #{district}
+        </if>
+    </select>
+
+    <select id="selectAnnualedCurrentMonthCount" resultType="int">
+        SELECT COUNT(1) FROM bbd_annual_info a, bbd_enterprise_info c
+        WHERE a.nbxh = c.nbxh
+        <if test="district != null and district != '5201'">
+            and c.district = #{district}
+        </if>
+        AND YEAR(a.gmt_annual)=#{year} AND MONTH(a.gmt_annual) = #{month}
+    </select>
+
+    <select id="selectAnnualedCompanyDistribute"
+            resultType="com.bbd.bean.statistics.CompanyAddrStaticInfo">
+        SELECT district as name, COUNT(1) as value, district as code
+        FROM bbd_enterprise_info
+        WHERE annual_state = 1
+        GROUP BY district
+    </select>
+
+    <select id="selectUnannualIndustryDistribute"
+            resultType="com.bbd.bean.statistics.NameValueInfo">
+        SELECT primary_industry_initial as name, COUNT(1) as value
+        FROM bbd_enterprise_info
+        WHERE annual_state = 2
+        AND primary_industry_initial IS NOT NULL
+        <if test="district != null and district != '5201'">
+            and district = #{district}
+        </if>
+        GROUP BY primary_industry_initial
+        ORDER BY COUNT(1) DESC
+    </select>
+
+    <select id="selectUnannualPropertyDistribute"
+            resultType="com.bbd.bean.statistics.NameValueInfo">
+        SELECT company_property as name, COUNT(1) as value
+        FROM bbd_enterprise_info
+        WHERE annual_state = 2
+        <if test="district != null and district != '5201'">
+            AND district = #{district}
+        </if>
+        GROUP BY company_property
+        ORDER BY COUNT(1) DESC
+    </select>
+
+</mapper>
+
+
+
+
+
+
+
+
+

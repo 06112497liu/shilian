@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.remind.CompanyRemindStatisticExtDao">
+
+    <update id="updateSuccessNum">
+        update bbd_company_remind_statistics
+        <if test="method == 1">
+            set mail_success = mail_success + #{num}
+        </if>
+        <if test="method == 2">
+            set msg_success = msg_success + #{num}
+        </if>
+        <if test="method == 3">
+            set voice_success = voice_success + #{num}
+        </if>
+        where nbxh = #{nbxh} and send_year = #{sendYear}
+    </update>
+
+    <update id="updateFailNum">
+        update bbd_company_remind_statistics
+        <if test="method == 1">
+            set mail_fail = mail_fail + #{num}
+        </if>
+        <if test="method == 2">
+            set msg_fail = msg_fail + #{num}
+        </if>
+        <if test="method == 3">
+            set voice_fail = voice_fail + #{num}
+        </if>
+        where nbxh = #{nbxh} and send_year = #{sendYear}
+    </update>
+
+</mapper>

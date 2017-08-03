@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.remind.MsgTaskExtDao">
+
+    <update id="increaseSuccess">
+        UPDATE bbd_msg_task
+        set success = success + #{num}
+        where id = #{taskId}
+    </update>
+
+    <update id="increaseFail">
+        UPDATE bbd_msg_task
+        set fail = fail + #{num}
+        where id = #{taskId}
+    </update>
+
+</mapper>

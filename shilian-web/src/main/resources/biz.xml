@@ -27,7 +27,7 @@
         <property name="fileEncoding" value="utf-8"/>
     </bean>
 
-    <bean id="springContextHolder" class="com.spring.common.SpringContextHolder"></bean>
+    <bean id="springContextHolder" class="com.bbd.spring.SpringContextHolder"></bean>
 
     <!-- 登录进去是哪个省 超级管理员 -->
     <bean id="adminProvince" class="com.bbd.bean.statistics.NameValueInfo">
