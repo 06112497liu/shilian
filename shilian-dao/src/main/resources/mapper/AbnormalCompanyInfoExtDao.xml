@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.AbnormalCompanyInfoExtDao">
+
+    <update id="syncCompanyType">
+        update bbd_abnormal_info ai, bbd_company_info ci
+        set ai.company_type = ci.company_type
+        where ai.nbxh = ci.nbxh and ai.company_type is null
+    </update>
+
+    <update id="syncDistrcit">
+        update bbd_abnormal_info ai, bbd_company_info ci
+        set ai.district = ci.district
+        where ai.nbxh = ci.nbxh and ai.district is null
+    </update>
+
+</mapper>

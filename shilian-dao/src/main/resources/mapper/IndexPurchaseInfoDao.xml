@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.IndexPurchaseInfoDao">
+  <resultMap id="BaseResultMap" type="com.bbd.domain.IndexPurchaseInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="index_type_id" jdbcType="INTEGER" property="indexTypeId" />
+    <result column="release_date" jdbcType="TIMESTAMP" property="releaseDate" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="is_tender" jdbcType="BIT" property="isTender" />
+    <result column="data_soruce" jdbcType="VARCHAR" property="dataSoruce" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="e_mail" jdbcType="VARCHAR" property="eMail" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bbd.domain.IndexPurchaseInfoWithBLOBs">
+    <result column="tender_company_name" jdbcType="LONGVARCHAR" property="tenderCompanyName" />
+    <result column="obtain_company_name" jdbcType="LONGVARCHAR" property="obtainCompanyName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, company_id, company_name, index_type_id, release_date, industry, region, project_name, 
+    is_tender, data_soruce, gmt_create, e_mail, telephone
+  </sql>
+  <sql id="Blob_Column_List">
+    tender_company_name, obtain_company_name
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bbd.domain.IndexPurchaseInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from bbd_index_purchase
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.bbd.domain.IndexPurchaseInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from bbd_index_purchase
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from bbd_index_purchase
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bbd_index_purchase
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bbd.domain.IndexPurchaseInfoWithBLOBs">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into bbd_index_purchase (company_id, company_name, index_type_id, 
+      release_date, industry, region, 
+      project_name, is_tender, data_soruce, 
+      gmt_create, e_mail, telephone, 
+      tender_company_name, obtain_company_name
+      )
+    values (#{companyId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{indexTypeId,jdbcType=INTEGER}, 
+      #{releaseDate,jdbcType=TIMESTAMP}, #{industry,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=VARCHAR}, #{isTender,jdbcType=BIT}, #{dataSoruce,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{eMail,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
+      #{tenderCompanyName,jdbcType=LONGVARCHAR}, #{obtainCompanyName,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bbd.domain.IndexPurchaseInfoWithBLOBs">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into bbd_index_purchase
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="indexTypeId != null">
+        index_type_id,
+      </if>
+      <if test="releaseDate != null">
+        release_date,
+      </if>
+      <if test="industry != null">
+        industry,
+      </if>
+      <if test="region != null">
+        region,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="isTender != null">
+        is_tender,
+      </if>
+      <if test="dataSoruce != null">
+        data_soruce,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="eMail != null">
+        e_mail,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+      <if test="tenderCompanyName != null">
+        tender_company_name,
+      </if>
+      <if test="obtainCompanyName != null">
+        obtain_company_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="indexTypeId != null">
+        #{indexTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="releaseDate != null">
+        #{releaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="industry != null">
+        #{industry,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="isTender != null">
+        #{isTender,jdbcType=BIT},
+      </if>
+      <if test="dataSoruce != null">
+        #{dataSoruce,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eMail != null">
+        #{eMail,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="tenderCompanyName != null">
+        #{tenderCompanyName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="obtainCompanyName != null">
+        #{obtainCompanyName,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map">
+    update bbd_index_purchase
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.indexTypeId != null">
+        index_type_id = #{record.indexTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.releaseDate != null">
+        release_date = #{record.releaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.industry != null">
+        industry = #{record.industry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.region != null">
+        region = #{record.region,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectName != null">
+        project_name = #{record.projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isTender != null">
+        is_tender = #{record.isTender,jdbcType=BIT},
+      </if>
+      <if test="record.dataSoruce != null">
+        data_soruce = #{record.dataSoruce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.eMail != null">
+        e_mail = #{record.eMail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.telephone != null">
+        telephone = #{record.telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenderCompanyName != null">
+        tender_company_name = #{record.tenderCompanyName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.obtainCompanyName != null">
+        obtain_company_name = #{record.obtainCompanyName,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update bbd_index_purchase
+    set id = #{record.id,jdbcType=INTEGER},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      index_type_id = #{record.indexTypeId,jdbcType=INTEGER},
+      release_date = #{record.releaseDate,jdbcType=TIMESTAMP},
+      industry = #{record.industry,jdbcType=VARCHAR},
+      region = #{record.region,jdbcType=VARCHAR},
+      project_name = #{record.projectName,jdbcType=VARCHAR},
+      is_tender = #{record.isTender,jdbcType=BIT},
+      data_soruce = #{record.dataSoruce,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      e_mail = #{record.eMail,jdbcType=VARCHAR},
+      telephone = #{record.telephone,jdbcType=VARCHAR},
+      tender_company_name = #{record.tenderCompanyName,jdbcType=LONGVARCHAR},
+      obtain_company_name = #{record.obtainCompanyName,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update bbd_index_purchase
+    set id = #{record.id,jdbcType=INTEGER},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      index_type_id = #{record.indexTypeId,jdbcType=INTEGER},
+      release_date = #{record.releaseDate,jdbcType=TIMESTAMP},
+      industry = #{record.industry,jdbcType=VARCHAR},
+      region = #{record.region,jdbcType=VARCHAR},
+      project_name = #{record.projectName,jdbcType=VARCHAR},
+      is_tender = #{record.isTender,jdbcType=BIT},
+      data_soruce = #{record.dataSoruce,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      e_mail = #{record.eMail,jdbcType=VARCHAR},
+      telephone = #{record.telephone,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bbd.domain.IndexPurchaseInfoWithBLOBs">
+    update bbd_index_purchase
+    <set>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="indexTypeId != null">
+        index_type_id = #{indexTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="releaseDate != null">
+        release_date = #{releaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="industry != null">
+        industry = #{industry,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        region = #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="isTender != null">
+        is_tender = #{isTender,jdbcType=BIT},
+      </if>
+      <if test="dataSoruce != null">
+        data_soruce = #{dataSoruce,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eMail != null">
+        e_mail = #{eMail,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="tenderCompanyName != null">
+        tender_company_name = #{tenderCompanyName,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="obtainCompanyName != null">
+        obtain_company_name = #{obtainCompanyName,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bbd.domain.IndexPurchaseInfoWithBLOBs">
+    update bbd_index_purchase
+    set company_id = #{companyId,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      index_type_id = #{indexTypeId,jdbcType=INTEGER},
+      release_date = #{releaseDate,jdbcType=TIMESTAMP},
+      industry = #{industry,jdbcType=VARCHAR},
+      region = #{region,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      is_tender = #{isTender,jdbcType=BIT},
+      data_soruce = #{dataSoruce,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      e_mail = #{eMail,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      tender_company_name = #{tenderCompanyName,jdbcType=LONGVARCHAR},
+      obtain_company_name = #{obtainCompanyName,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bbd.domain.IndexPurchaseInfo">
+    update bbd_index_purchase
+    set company_id = #{companyId,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      index_type_id = #{indexTypeId,jdbcType=INTEGER},
+      release_date = #{releaseDate,jdbcType=TIMESTAMP},
+      industry = #{industry,jdbcType=VARCHAR},
+      region = #{region,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      is_tender = #{isTender,jdbcType=BIT},
+      data_soruce = #{dataSoruce,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      e_mail = #{eMail,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByExampleWithPageBounds" parameterType="com.bbd.domain.IndexPurchaseInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from bbd_index_purchase
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

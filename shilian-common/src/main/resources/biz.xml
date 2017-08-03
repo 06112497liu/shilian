@@ -1,0 +1,54 @@
+<beans
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xsi:schemaLocation="http://www.springframework.org/schema/context
+	    http://www.springframework.org/schema/context/spring-context.xsd
+	    http://www.springframework.org/schema/beans
+	    http://www.springframework.org/schema/beans/spring-beans.xsd
+	    http://www.springframework.org/schema/aop
+	    http://www.springframework.org/schema/aop/spring-aop.xsd"
+        xmlns="http://www.springframework.org/schema/beans">
+
+    <bean id="propertiesConfig"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:config.properties</value>
+                <value>file:/var/reddata/web/company/config.properties</value>
+            </list>
+        </property>
+        <!-- 设置编码格式 -->
+        <property name="fileEncoding" value="UTF-8"></property>
+    </bean>
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="properties" ref="propertiesConfig"/>
+        <property name="fileEncoding" value="utf-8"/>
+    </bean>
+
+    <bean id="springContextHolder" class="com.spring.common.SpringContextHolder"></bean>
+
+    <!-- 登录进去是哪个省 超级管理员 -->
+    <bean id="adminProvince" class="com.bbd.bean.statistics.NameValueInfo">
+        <property name="name" value="贵州"></property>
+        <property name="value" value="52"></property>
+    </bean>
+
+    <!-- 配置一个超级管理员 -->
+    <bean id="adminUser" class="com.bbd.bean.system.LoginUserInfo">
+        <property name="username" value="super_admin"/>
+        <property name="password" value="2142F85B771735CBA6A4C0785AE97314"/>
+        <property name="province" ref="adminProvince"/>
+        <property name="role" value="超级管理员"/>
+        <property name="type" value="3"/>
+    </bean>
+
+    <context:component-scan base-package="com.bbd.*">
+        <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <aop:aspectj-autoproxy/>
+
+</beans>

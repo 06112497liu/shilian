@@ -4,8 +4,8 @@
  */
 package com.bbd.bean.company;
 
-import com.excel.annotation.ExcelRow;
-import com.excel.annotation.ExcelTitle;
+import com.bbd.excel.ExcelRow;
+import com.bbd.excel.ExcelTitle;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

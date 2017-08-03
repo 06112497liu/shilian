@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.KettleExecuteRecordDao">
+   <insert id="insertRecord" parameterType="com.bbd.domain.KettleExecuteRecordInfo">
+    
+    insert into bbd_etl_kettle_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="objectName != null">
+        object_name,
+      </if>
+      <if test="executeBeginTime != null">
+        execute_begin_time,
+      </if>
+      <if test="executeEndTime != null">
+        execute_end_time,
+      </if>
+      <if test="executeStatus != null">
+        execute_status,
+      </if>
+      <if test="resultSetCount != null">
+        resultset_count,
+      </if>
+      <if test="mark != null">
+        mark,
+      </if>
+      <if test="dataFlag != null">
+        data_flag,
+      </if>
+      <if test="objectId != null">
+        object_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="objectName != null">
+        #{objectName,jdbcType=VARCHAR},
+      </if>
+      <if test="executeBeginTime != null">
+        #{executeBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="executeEndTime != null">
+        #{executeEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="executeStatus != null">
+        #{executeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="resultSetCount != null">
+        #{resultSetCount,jdbcType=INTEGER},
+      </if>
+      <if test="mark != null">
+        #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="dataFlag != null">
+        #{dataFlag,jdbcType=INTEGER},
+      </if>
+      <if test="objectId != null">
+        #{objectId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

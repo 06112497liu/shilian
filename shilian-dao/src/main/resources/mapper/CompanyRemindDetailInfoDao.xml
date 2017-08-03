@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.CompanyRemindDetailInfoDao">
+  <resultMap id="BaseResultMap" type="com.bbd.domain.CompanyRemindDetailInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="nbxh" jdbcType="VARCHAR" property="nbxh" />
+    <result column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="method" jdbcType="TINYINT" property="method" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="target" jdbcType="VARCHAR" property="target" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="send_year" jdbcType="INTEGER" property="sendYear" />
+    <result column="send_month" jdbcType="INTEGER" property="sendMonth" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="district" jdbcType="VARCHAR" property="district" />
+    <result column="send_day" jdbcType="INTEGER" property="sendDay" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, nbxh, task_id, method, source, target, content, status, send_time, reason, send_year, 
+    send_month, gmt_modified, gmt_create, type, district, send_day
+  </sql>
+  <select id="selectByExample" parameterType="com.bbd.domain.CompanyRemindDetailInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from bbd_company_remind_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bbd_company_remind_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bbd_company_remind_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bbd.domain.CompanyRemindDetailInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into bbd_company_remind_detail (nbxh, task_id, method, 
+      source, target, content, 
+      status, send_time, reason, 
+      send_year, send_month, gmt_modified, 
+      gmt_create, type, district, 
+      send_day)
+    values (#{nbxh,jdbcType=VARCHAR}, #{taskId,jdbcType=INTEGER}, #{method,jdbcType=TINYINT}, 
+      #{source,jdbcType=VARCHAR}, #{target,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{sendTime,jdbcType=TIMESTAMP}, #{reason,jdbcType=VARCHAR}, 
+      #{sendYear,jdbcType=INTEGER}, #{sendMonth,jdbcType=INTEGER}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{type,jdbcType=TINYINT}, #{district,jdbcType=VARCHAR}, 
+      #{sendDay,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bbd.domain.CompanyRemindDetailInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into bbd_company_remind_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nbxh != null">
+        nbxh,
+      </if>
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="method != null">
+        method,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="target != null">
+        target,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="sendTime != null">
+        send_time,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="sendYear != null">
+        send_year,
+      </if>
+      <if test="sendMonth != null">
+        send_month,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="district != null">
+        district,
+      </if>
+      <if test="sendDay != null">
+        send_day,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nbxh != null">
+        #{nbxh,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="method != null">
+        #{method,jdbcType=TINYINT},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="target != null">
+        #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="sendYear != null">
+        #{sendYear,jdbcType=INTEGER},
+      </if>
+      <if test="sendMonth != null">
+        #{sendMonth,jdbcType=INTEGER},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="district != null">
+        #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="sendDay != null">
+        #{sendDay,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map">
+    update bbd_company_remind_detail
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.nbxh != null">
+        nbxh = #{record.nbxh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskId != null">
+        task_id = #{record.taskId,jdbcType=INTEGER},
+      </if>
+      <if test="record.method != null">
+        method = #{record.method,jdbcType=TINYINT},
+      </if>
+      <if test="record.source != null">
+        source = #{record.source,jdbcType=VARCHAR},
+      </if>
+      <if test="record.target != null">
+        target = #{record.target,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.sendTime != null">
+        send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.reason != null">
+        reason = #{record.reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sendYear != null">
+        send_year = #{record.sendYear,jdbcType=INTEGER},
+      </if>
+      <if test="record.sendMonth != null">
+        send_month = #{record.sendMonth,jdbcType=INTEGER},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.district != null">
+        district = #{record.district,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sendDay != null">
+        send_day = #{record.sendDay,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update bbd_company_remind_detail
+    set id = #{record.id,jdbcType=INTEGER},
+      nbxh = #{record.nbxh,jdbcType=VARCHAR},
+      task_id = #{record.taskId,jdbcType=INTEGER},
+      method = #{record.method,jdbcType=TINYINT},
+      source = #{record.source,jdbcType=VARCHAR},
+      target = #{record.target,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      reason = #{record.reason,jdbcType=VARCHAR},
+      send_year = #{record.sendYear,jdbcType=INTEGER},
+      send_month = #{record.sendMonth,jdbcType=INTEGER},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      type = #{record.type,jdbcType=TINYINT},
+      district = #{record.district,jdbcType=VARCHAR},
+      send_day = #{record.sendDay,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bbd.domain.CompanyRemindDetailInfo">
+    update bbd_company_remind_detail
+    <set>
+      <if test="nbxh != null">
+        nbxh = #{nbxh,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null">
+        task_id = #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="method != null">
+        method = #{method,jdbcType=TINYINT},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="target != null">
+        target = #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="sendYear != null">
+        send_year = #{sendYear,jdbcType=INTEGER},
+      </if>
+      <if test="sendMonth != null">
+        send_month = #{sendMonth,jdbcType=INTEGER},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="district != null">
+        district = #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="sendDay != null">
+        send_day = #{sendDay,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bbd.domain.CompanyRemindDetailInfo">
+    update bbd_company_remind_detail
+    set nbxh = #{nbxh,jdbcType=VARCHAR},
+      task_id = #{taskId,jdbcType=INTEGER},
+      method = #{method,jdbcType=TINYINT},
+      source = #{source,jdbcType=VARCHAR},
+      target = #{target,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      reason = #{reason,jdbcType=VARCHAR},
+      send_year = #{sendYear,jdbcType=INTEGER},
+      send_month = #{sendMonth,jdbcType=INTEGER},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=TINYINT},
+      district = #{district,jdbcType=VARCHAR},
+      send_day = #{sendDay,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByExampleWithPageBounds" parameterType="com.bbd.domain.CompanyRemindDetailInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from bbd_company_remind_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

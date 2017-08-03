@@ -1,7 +1,7 @@
 package com.bbd.bean.company;
 
-import com.excel.annotation.ExcelRow;
-import com.excel.annotation.ExcelTitle;
+import com.bbd.excel.ExcelRow;
+import com.bbd.excel.ExcelTitle;
 
 /**
  * 连线信息

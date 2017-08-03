@@ -4,7 +4,7 @@
  */
 package com.bbd.bean.company;
 
-import com.excel.annotation.ExcelRow;
+import com.bbd.excel.ExcelRow;
 
 /**
  * 带经营活动的企业信息

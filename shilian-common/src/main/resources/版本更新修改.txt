@@ -1,0 +1,7 @@
+2017.7.27
+
+ALTER TABLE `bbd_auto_remind_setting` ADD COLUMN operator VARCHAR(24) NOT NULL COMMENT '操作者权限';
+UPDATE bbd_auto_remind_setting s1, bbd_auto_remind_setting s2 SET s1.`operator`=s2.district WHERE s1.id = s2.id;
+
+2017.7.27
+ALTER TABLE bbd_business_month_statistics ADD business_records VARCHAR(100) NOT NULL DEFAULT '' COMMENT '一年的经营活动' <!--刘维柏-->
