@@ -1,0 +1,754 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.CompanyInfoDao">
+  <resultMap id="BaseResultMap" type="com.bbd.domain.CompanyInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="district" jdbcType="VARCHAR" property="district" />
+    <result column="phones" jdbcType="VARCHAR" property="phones" />
+    <result column="emails" jdbcType="VARCHAR" property="emails" />
+    <result column="company_credit_code" jdbcType="VARCHAR" property="companyCreditCode" />
+    <result column="gmt_company_register" jdbcType="TIMESTAMP" property="gmtCompanyRegister" />
+    <result column="primary_industry" jdbcType="VARCHAR" property="primaryIndustry" />
+    <result column="primary_industry_initial" jdbcType="VARCHAR" property="primaryIndustryInitial" />
+    <result column="gmt_approval" jdbcType="TIMESTAMP" property="gmtApproval" />
+    <result column="gmt_cancel" jdbcType="TIMESTAMP" property="gmtCancel" />
+    <result column="gmt_suspend" jdbcType="TIMESTAMP" property="gmtSuspend" />
+    <result column="company_type" jdbcType="VARCHAR" property="companyType" />
+    <result column="register_number" jdbcType="VARCHAR" property="registerNumber" />
+    <result column="register_capital" jdbcType="REAL" property="registerCapital" />
+    <result column="legal_person" jdbcType="VARCHAR" property="legalPerson" />
+    <result column="register_authority" jdbcType="VARCHAR" property="registerAuthority" />
+    <result column="register_status" jdbcType="VARCHAR" property="registerStatus" />
+    <result column="operate_scope" jdbcType="VARCHAR" property="operateScope" />
+    <result column="name_type" jdbcType="VARCHAR" property="nameType" />
+    <result column="addr" jdbcType="VARCHAR" property="addr" />
+    <result column="latitude" jdbcType="DOUBLE" property="latitude" />
+    <result column="longitude" jdbcType="DOUBLE" property="longitude" />
+    <result column="nbxh" jdbcType="VARCHAR" property="nbxh" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="company_property" jdbcType="TINYINT" property="companyProperty" />
+    <result column="annual_state" jdbcType="TINYINT" property="annualState" />
+    <result column="abnormal_state" jdbcType="TINYINT" property="abnormalState" />
+    <result column="index_score" jdbcType="DOUBLE" property="indexScore" />
+    <result column="company_state" jdbcType="TINYINT" property="companyState" />
+    <result column="annual_emails" jdbcType="VARCHAR" property="annualEmails" />
+    <result column="annual_phones" jdbcType="VARCHAR" property="annualPhones" />
+    <result column="business_records" jdbcType="VARCHAR" property="businessRecords" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, company_name, province, city, district, phones, emails, company_credit_code, 
+    gmt_company_register, primary_industry, primary_industry_initial, gmt_approval, gmt_cancel, 
+    gmt_suspend, company_type, register_number, register_capital, legal_person, register_authority, 
+    register_status, operate_scope, name_type, addr, latitude, longitude, nbxh, create_time, 
+    update_time, gmt_create, gmt_modified, company_property, annual_state, abnormal_state, 
+    index_score, company_state, annual_emails, annual_phones, business_records, status
+  </sql>
+  <select id="selectByExample" parameterType="com.bbd.domain.CompanyInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from bbd_company_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bbd_company_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bbd_company_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bbd.domain.CompanyInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into bbd_company_info (company_name, province, city, 
+      district, phones, emails, 
+      company_credit_code, gmt_company_register, 
+      primary_industry, primary_industry_initial, 
+      gmt_approval, gmt_cancel, gmt_suspend, 
+      company_type, register_number, register_capital, 
+      legal_person, register_authority, register_status, 
+      operate_scope, name_type, addr, 
+      latitude, longitude, nbxh, 
+      create_time, update_time, gmt_create, 
+      gmt_modified, company_property, annual_state, 
+      abnormal_state, index_score, company_state, 
+      annual_emails, annual_phones, business_records, 
+      status)
+    values (#{companyName,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{district,jdbcType=VARCHAR}, #{phones,jdbcType=VARCHAR}, #{emails,jdbcType=VARCHAR}, 
+      #{companyCreditCode,jdbcType=VARCHAR}, #{gmtCompanyRegister,jdbcType=TIMESTAMP}, 
+      #{primaryIndustry,jdbcType=VARCHAR}, #{primaryIndustryInitial,jdbcType=VARCHAR}, 
+      #{gmtApproval,jdbcType=TIMESTAMP}, #{gmtCancel,jdbcType=TIMESTAMP}, #{gmtSuspend,jdbcType=TIMESTAMP}, 
+      #{companyType,jdbcType=VARCHAR}, #{registerNumber,jdbcType=VARCHAR}, #{registerCapital,jdbcType=REAL}, 
+      #{legalPerson,jdbcType=VARCHAR}, #{registerAuthority,jdbcType=VARCHAR}, #{registerStatus,jdbcType=VARCHAR}, 
+      #{operateScope,jdbcType=VARCHAR}, #{nameType,jdbcType=VARCHAR}, #{addr,jdbcType=VARCHAR}, 
+      #{latitude,jdbcType=DOUBLE}, #{longitude,jdbcType=DOUBLE}, #{nbxh,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{companyProperty,jdbcType=TINYINT}, #{annualState,jdbcType=TINYINT}, 
+      #{abnormalState,jdbcType=TINYINT}, #{indexScore,jdbcType=DOUBLE}, #{companyState,jdbcType=TINYINT}, 
+      #{annualEmails,jdbcType=VARCHAR}, #{annualPhones,jdbcType=VARCHAR}, #{businessRecords,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bbd.domain.CompanyInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into bbd_company_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="district != null">
+        district,
+      </if>
+      <if test="phones != null">
+        phones,
+      </if>
+      <if test="emails != null">
+        emails,
+      </if>
+      <if test="companyCreditCode != null">
+        company_credit_code,
+      </if>
+      <if test="gmtCompanyRegister != null">
+        gmt_company_register,
+      </if>
+      <if test="primaryIndustry != null">
+        primary_industry,
+      </if>
+      <if test="primaryIndustryInitial != null">
+        primary_industry_initial,
+      </if>
+      <if test="gmtApproval != null">
+        gmt_approval,
+      </if>
+      <if test="gmtCancel != null">
+        gmt_cancel,
+      </if>
+      <if test="gmtSuspend != null">
+        gmt_suspend,
+      </if>
+      <if test="companyType != null">
+        company_type,
+      </if>
+      <if test="registerNumber != null">
+        register_number,
+      </if>
+      <if test="registerCapital != null">
+        register_capital,
+      </if>
+      <if test="legalPerson != null">
+        legal_person,
+      </if>
+      <if test="registerAuthority != null">
+        register_authority,
+      </if>
+      <if test="registerStatus != null">
+        register_status,
+      </if>
+      <if test="operateScope != null">
+        operate_scope,
+      </if>
+      <if test="nameType != null">
+        name_type,
+      </if>
+      <if test="addr != null">
+        addr,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="nbxh != null">
+        nbxh,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="companyProperty != null">
+        company_property,
+      </if>
+      <if test="annualState != null">
+        annual_state,
+      </if>
+      <if test="abnormalState != null">
+        abnormal_state,
+      </if>
+      <if test="indexScore != null">
+        index_score,
+      </if>
+      <if test="companyState != null">
+        company_state,
+      </if>
+      <if test="annualEmails != null">
+        annual_emails,
+      </if>
+      <if test="annualPhones != null">
+        annual_phones,
+      </if>
+      <if test="businessRecords != null">
+        business_records,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null">
+        #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="phones != null">
+        #{phones,jdbcType=VARCHAR},
+      </if>
+      <if test="emails != null">
+        #{emails,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCreditCode != null">
+        #{companyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCompanyRegister != null">
+        #{gmtCompanyRegister,jdbcType=TIMESTAMP},
+      </if>
+      <if test="primaryIndustry != null">
+        #{primaryIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="primaryIndustryInitial != null">
+        #{primaryIndustryInitial,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtApproval != null">
+        #{gmtApproval,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCancel != null">
+        #{gmtCancel,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtSuspend != null">
+        #{gmtSuspend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyType != null">
+        #{companyType,jdbcType=VARCHAR},
+      </if>
+      <if test="registerNumber != null">
+        #{registerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="registerCapital != null">
+        #{registerCapital,jdbcType=REAL},
+      </if>
+      <if test="legalPerson != null">
+        #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="registerAuthority != null">
+        #{registerAuthority,jdbcType=VARCHAR},
+      </if>
+      <if test="registerStatus != null">
+        #{registerStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="operateScope != null">
+        #{operateScope,jdbcType=VARCHAR},
+      </if>
+      <if test="nameType != null">
+        #{nameType,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null">
+        #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="nbxh != null">
+        #{nbxh,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyProperty != null">
+        #{companyProperty,jdbcType=TINYINT},
+      </if>
+      <if test="annualState != null">
+        #{annualState,jdbcType=TINYINT},
+      </if>
+      <if test="abnormalState != null">
+        #{abnormalState,jdbcType=TINYINT},
+      </if>
+      <if test="indexScore != null">
+        #{indexScore,jdbcType=DOUBLE},
+      </if>
+      <if test="companyState != null">
+        #{companyState,jdbcType=TINYINT},
+      </if>
+      <if test="annualEmails != null">
+        #{annualEmails,jdbcType=VARCHAR},
+      </if>
+      <if test="annualPhones != null">
+        #{annualPhones,jdbcType=VARCHAR},
+      </if>
+      <if test="businessRecords != null">
+        #{businessRecords,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map">
+    update bbd_company_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null">
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.district != null">
+        district = #{record.district,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phones != null">
+        phones = #{record.phones,jdbcType=VARCHAR},
+      </if>
+      <if test="record.emails != null">
+        emails = #{record.emails,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyCreditCode != null">
+        company_credit_code = #{record.companyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCompanyRegister != null">
+        gmt_company_register = #{record.gmtCompanyRegister,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.primaryIndustry != null">
+        primary_industry = #{record.primaryIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.primaryIndustryInitial != null">
+        primary_industry_initial = #{record.primaryIndustryInitial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtApproval != null">
+        gmt_approval = #{record.gmtApproval,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtCancel != null">
+        gmt_cancel = #{record.gmtCancel,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtSuspend != null">
+        gmt_suspend = #{record.gmtSuspend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.companyType != null">
+        company_type = #{record.companyType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registerNumber != null">
+        register_number = #{record.registerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registerCapital != null">
+        register_capital = #{record.registerCapital,jdbcType=REAL},
+      </if>
+      <if test="record.legalPerson != null">
+        legal_person = #{record.legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registerAuthority != null">
+        register_authority = #{record.registerAuthority,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registerStatus != null">
+        register_status = #{record.registerStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operateScope != null">
+        operate_scope = #{record.operateScope,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nameType != null">
+        name_type = #{record.nameType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addr != null">
+        addr = #{record.addr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latitude != null">
+        latitude = #{record.latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="record.longitude != null">
+        longitude = #{record.longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="record.nbxh != null">
+        nbxh = #{record.nbxh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.companyProperty != null">
+        company_property = #{record.companyProperty,jdbcType=TINYINT},
+      </if>
+      <if test="record.annualState != null">
+        annual_state = #{record.annualState,jdbcType=TINYINT},
+      </if>
+      <if test="record.abnormalState != null">
+        abnormal_state = #{record.abnormalState,jdbcType=TINYINT},
+      </if>
+      <if test="record.indexScore != null">
+        index_score = #{record.indexScore,jdbcType=DOUBLE},
+      </if>
+      <if test="record.companyState != null">
+        company_state = #{record.companyState,jdbcType=TINYINT},
+      </if>
+      <if test="record.annualEmails != null">
+        annual_emails = #{record.annualEmails,jdbcType=VARCHAR},
+      </if>
+      <if test="record.annualPhones != null">
+        annual_phones = #{record.annualPhones,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessRecords != null">
+        business_records = #{record.businessRecords,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update bbd_company_info
+    set id = #{record.id,jdbcType=INTEGER},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      province = #{record.province,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      district = #{record.district,jdbcType=VARCHAR},
+      phones = #{record.phones,jdbcType=VARCHAR},
+      emails = #{record.emails,jdbcType=VARCHAR},
+      company_credit_code = #{record.companyCreditCode,jdbcType=VARCHAR},
+      gmt_company_register = #{record.gmtCompanyRegister,jdbcType=TIMESTAMP},
+      primary_industry = #{record.primaryIndustry,jdbcType=VARCHAR},
+      primary_industry_initial = #{record.primaryIndustryInitial,jdbcType=VARCHAR},
+      gmt_approval = #{record.gmtApproval,jdbcType=TIMESTAMP},
+      gmt_cancel = #{record.gmtCancel,jdbcType=TIMESTAMP},
+      gmt_suspend = #{record.gmtSuspend,jdbcType=TIMESTAMP},
+      company_type = #{record.companyType,jdbcType=VARCHAR},
+      register_number = #{record.registerNumber,jdbcType=VARCHAR},
+      register_capital = #{record.registerCapital,jdbcType=REAL},
+      legal_person = #{record.legalPerson,jdbcType=VARCHAR},
+      register_authority = #{record.registerAuthority,jdbcType=VARCHAR},
+      register_status = #{record.registerStatus,jdbcType=VARCHAR},
+      operate_scope = #{record.operateScope,jdbcType=VARCHAR},
+      name_type = #{record.nameType,jdbcType=VARCHAR},
+      addr = #{record.addr,jdbcType=VARCHAR},
+      latitude = #{record.latitude,jdbcType=DOUBLE},
+      longitude = #{record.longitude,jdbcType=DOUBLE},
+      nbxh = #{record.nbxh,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      company_property = #{record.companyProperty,jdbcType=TINYINT},
+      annual_state = #{record.annualState,jdbcType=TINYINT},
+      abnormal_state = #{record.abnormalState,jdbcType=TINYINT},
+      index_score = #{record.indexScore,jdbcType=DOUBLE},
+      company_state = #{record.companyState,jdbcType=TINYINT},
+      annual_emails = #{record.annualEmails,jdbcType=VARCHAR},
+      annual_phones = #{record.annualPhones,jdbcType=VARCHAR},
+      business_records = #{record.businessRecords,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bbd.domain.CompanyInfo">
+    update bbd_company_info
+    <set>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null">
+        district = #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="phones != null">
+        phones = #{phones,jdbcType=VARCHAR},
+      </if>
+      <if test="emails != null">
+        emails = #{emails,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCreditCode != null">
+        company_credit_code = #{companyCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCompanyRegister != null">
+        gmt_company_register = #{gmtCompanyRegister,jdbcType=TIMESTAMP},
+      </if>
+      <if test="primaryIndustry != null">
+        primary_industry = #{primaryIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="primaryIndustryInitial != null">
+        primary_industry_initial = #{primaryIndustryInitial,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtApproval != null">
+        gmt_approval = #{gmtApproval,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCancel != null">
+        gmt_cancel = #{gmtCancel,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtSuspend != null">
+        gmt_suspend = #{gmtSuspend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyType != null">
+        company_type = #{companyType,jdbcType=VARCHAR},
+      </if>
+      <if test="registerNumber != null">
+        register_number = #{registerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="registerCapital != null">
+        register_capital = #{registerCapital,jdbcType=REAL},
+      </if>
+      <if test="legalPerson != null">
+        legal_person = #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="registerAuthority != null">
+        register_authority = #{registerAuthority,jdbcType=VARCHAR},
+      </if>
+      <if test="registerStatus != null">
+        register_status = #{registerStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="operateScope != null">
+        operate_scope = #{operateScope,jdbcType=VARCHAR},
+      </if>
+      <if test="nameType != null">
+        name_type = #{nameType,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null">
+        addr = #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="nbxh != null">
+        nbxh = #{nbxh,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyProperty != null">
+        company_property = #{companyProperty,jdbcType=TINYINT},
+      </if>
+      <if test="annualState != null">
+        annual_state = #{annualState,jdbcType=TINYINT},
+      </if>
+      <if test="abnormalState != null">
+        abnormal_state = #{abnormalState,jdbcType=TINYINT},
+      </if>
+      <if test="indexScore != null">
+        index_score = #{indexScore,jdbcType=DOUBLE},
+      </if>
+      <if test="companyState != null">
+        company_state = #{companyState,jdbcType=TINYINT},
+      </if>
+      <if test="annualEmails != null">
+        annual_emails = #{annualEmails,jdbcType=VARCHAR},
+      </if>
+      <if test="annualPhones != null">
+        annual_phones = #{annualPhones,jdbcType=VARCHAR},
+      </if>
+      <if test="businessRecords != null">
+        business_records = #{businessRecords,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bbd.domain.CompanyInfo">
+    update bbd_company_info
+    set company_name = #{companyName,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      district = #{district,jdbcType=VARCHAR},
+      phones = #{phones,jdbcType=VARCHAR},
+      emails = #{emails,jdbcType=VARCHAR},
+      company_credit_code = #{companyCreditCode,jdbcType=VARCHAR},
+      gmt_company_register = #{gmtCompanyRegister,jdbcType=TIMESTAMP},
+      primary_industry = #{primaryIndustry,jdbcType=VARCHAR},
+      primary_industry_initial = #{primaryIndustryInitial,jdbcType=VARCHAR},
+      gmt_approval = #{gmtApproval,jdbcType=TIMESTAMP},
+      gmt_cancel = #{gmtCancel,jdbcType=TIMESTAMP},
+      gmt_suspend = #{gmtSuspend,jdbcType=TIMESTAMP},
+      company_type = #{companyType,jdbcType=VARCHAR},
+      register_number = #{registerNumber,jdbcType=VARCHAR},
+      register_capital = #{registerCapital,jdbcType=REAL},
+      legal_person = #{legalPerson,jdbcType=VARCHAR},
+      register_authority = #{registerAuthority,jdbcType=VARCHAR},
+      register_status = #{registerStatus,jdbcType=VARCHAR},
+      operate_scope = #{operateScope,jdbcType=VARCHAR},
+      name_type = #{nameType,jdbcType=VARCHAR},
+      addr = #{addr,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      nbxh = #{nbxh,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      company_property = #{companyProperty,jdbcType=TINYINT},
+      annual_state = #{annualState,jdbcType=TINYINT},
+      abnormal_state = #{abnormalState,jdbcType=TINYINT},
+      index_score = #{indexScore,jdbcType=DOUBLE},
+      company_state = #{companyState,jdbcType=TINYINT},
+      annual_emails = #{annualEmails,jdbcType=VARCHAR},
+      annual_phones = #{annualPhones,jdbcType=VARCHAR},
+      business_records = #{businessRecords,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByExampleWithPageBounds" parameterType="com.bbd.domain.CompanyInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from bbd_company_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>
