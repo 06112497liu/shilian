@@ -28,7 +28,7 @@
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="annualRemindMannualEmailSendJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="0 * 5-23 * * ?"/>
+        <property name="cronExpression" value="0 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -42,7 +42,7 @@
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="lostRemindMannualEmailSendJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="5 * 5-23 * * ?"/>
+        <property name="cronExpression" value="5 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -57,7 +57,7 @@
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="unannualRemindMannualEmailSendJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="10 * 5-23 * * ?"/>
+        <property name="cronExpression" value="10 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -72,7 +72,7 @@
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="unpublicityRemindMannualEmailSendJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="15 * 5-23 * * ?"/>
+        <property name="cronExpression" value="15 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -87,7 +87,7 @@
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="fakeInfoRemindMannualEmailSendJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="20 * 5-23 * * ?"/>
+        <property name="cronExpression" value="20 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -102,7 +102,7 @@
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="annualRemindMannualSmsSendJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="25 * 5-23 * * ?"/>
+        <property name="cronExpression" value="25 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -116,7 +116,7 @@
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="lostRemindMannualSmsSendJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="30 * 5-23 * * ?"/>
+        <property name="cronExpression" value="30 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -131,7 +131,7 @@
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="unannualRemindMannualSmsSendJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="35 * 5-23 * * ?"/>
+        <property name="cronExpression" value="35 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -146,7 +146,7 @@
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="unpublicityRemindMannualSmsSendJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="40 * 5-23 * * ?"/>
+        <property name="cronExpression" value="40 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -161,7 +161,7 @@
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="fakeInfoRemindMannualSmsSendJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="45 * 5-23 * * ?"/>
+        <property name="cronExpression" value="45 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -175,7 +175,7 @@
     <bean id="messageDetailGenerateJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="messageDetailGenerateJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="50 * 5-23 * * ?"/>
+        <property name="cronExpression" value="50 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -188,7 +188,7 @@
     <bean id="autoRemindGenerateJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="autoRemindGenerateJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="55 * 5-23 * * ?"/>
+        <property name="cronExpression" value="55 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -201,7 +201,7 @@
     <bean id="autoRemindMessageSendJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="autoRemindMessageSendJobDetail"/>
         <property name="startDelay" value="10000"/>
-        <property name="cronExpression" value="0 * 5-23 * * ?"/>
+        <property name="cronExpression" value="0 0/5 5-23 * * ?"/>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
     </bean>
@@ -244,7 +244,7 @@
     <bean id="companyActivityCalculateJobTrigger"
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="companyActivityCalculateJobDetail"/>
-        <property name="cronExpression" value="0 40 5-23 * * ?"/>
+        <property name="cronExpression" value="0 0/5 5-23 * * ?"/>
         <property name="startDelay" value="10000"></property>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
@@ -259,7 +259,7 @@
     <bean id="companyESSyncJobTrigger"
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="companyESSyncJobDetail"/>
-        <property name="cronExpression" value="0 0 5-22 * * ?"/>
+        <property name="cronExpression" value="0 0/10 5-22 * * ?"/>
         <property name="startDelay" value="60000"></property>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
@@ -274,7 +274,7 @@
     <bean id="companyBusinessRecordSyncJobTrigger"
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="companyBusinessRecordSyncJob"/>
-        <property name="cronExpression" value="0 30 5-22 * * ?"/>
+        <property name="cronExpression" value="0 0/5 5-22 * * ?"/>
         <property name="startDelay" value="60000"></property>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
