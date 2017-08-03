@@ -15,7 +15,7 @@ public class CompanyTypeNew {
     /** 私营企业 */
     public static final int    PRIVATE        = 1;
 
-    public static final String PRIVATE_CN     = "私营企业";
+    public static final String PRIVATE_CN     = "民营企业";
 
     /** 国有企业及其他 */
     public static final int    STATE_OWNED    = 2;
