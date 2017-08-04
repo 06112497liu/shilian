@@ -167,7 +167,8 @@ public class LostCompanyStatisticsServiceImpl implements ILostCompanyStatisticsS
     @SuppressWarnings("deprecation")
     public void downLoadReport(HttpServletResponse response, String uid) {
         try {
-            response.setHeader("Content-disposition", "attachment;filename=\"" + URLEncoder.encode("失联企业报告.doc") + "\"");
+            String fileName = DateUtil.formatDateByPatten(new Date(), "yyyyMMddHHmmss");
+            response.setHeader("Content-disposition", "attachment;filename=\"" + fileName + ".doc" + "\"");
             response.setContentType("application/msword");
             RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
             byte[] keyBytes = ("doc-" + uid).getBytes();
@@ -380,6 +381,9 @@ public class LostCompanyStatisticsServiceImpl implements ILostCompanyStatisticsS
                 query.setType(UserContext.DISTRICT);
                 break;
             // 异常
+            case 8:
+                query.setType(UserContext.DISTRICT);
+                break;
             default:
                 throw new ApplicationException(CommonErrorCode.PARAM_ERROR);
         }
