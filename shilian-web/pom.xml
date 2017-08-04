@@ -32,4 +32,8 @@
 
     </dependencies>
 
+    <build>
+        <finalName>ROOT</finalName>
+    </build>
+
 </project>
