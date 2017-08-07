@@ -4,6 +4,8 @@
  */
 package com.bbd.controller.param;
 
+import com.utils.ObjectMapperUtil;
+
 /**
  *
  * @author tjwang
@@ -11,15 +13,20 @@ package com.bbd.controller.param;
  */
 public class MannualRemindConditionParam {
 
-    private String  companyName;
+    private String companyName;
 
-    private String  district;
+    private String district;
 
-    private String  primaryIndustry;
+    private String primaryIndustry;
 
     private Double indexScoreFrom;
 
     private Double indexScoreTo;
+
+    @Override
+    public String toString() {
+        return ObjectMapperUtil.write(this);
+    }
 
     public String getCompanyName() {
         return companyName;
