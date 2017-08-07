@@ -66,13 +66,13 @@ public class LostCompanyListVo {
     /**企业注册时间*/
     @ExcelRow("企业注册时间")
     @ApiModelProperty(value = "注册时间")
-    @JsonFormat(pattern = "yyyy年MM月dd日", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     private Date              gmtCompanyRegister;
 
     /**失联企业更新时间*/
     @ExcelRow("失联入库时间")
     @ApiModelProperty(value = "失联入库时间")
-    @JsonFormat(pattern = "yyyy年MM月dd日", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     private Date              lostTime;
 
     public static long getSerialversionuid() {
