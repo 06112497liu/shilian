@@ -27,6 +27,7 @@ import com.bbd.util.StringUtils;
 import com.bbd.utils.*;
 import com.exception.ApplicationException;
 import com.exception.CommonErrorCode;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.mybatis.domain.PageBounds;
 import com.mybatis.domain.PageList;
@@ -81,6 +82,7 @@ public class LostCompanyStatisticsServiceImpl implements ILostCompanyStatisticsS
 
     @Override
     public String exportStatisticsWord(Integer areaCode, String hotImg, String companyTypeImg, String industryImg) {
+        Preconditions.checkArgument(areaCode != null, "地址编码不能为空");
         String uid = UUID.randomUUID().toString();
         try {
             // 1.图片解析 

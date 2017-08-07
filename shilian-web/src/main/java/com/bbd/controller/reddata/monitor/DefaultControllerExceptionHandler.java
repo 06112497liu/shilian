@@ -28,7 +28,7 @@ import java.util.List;
 @ControllerAdvice
 public class DefaultControllerExceptionHandler {
 
-    public Logger logger = LoggerFactory.getLogger(getClass());
+    public static final Logger logger = LoggerFactory.getLogger(DefaultControllerExceptionHandler.class);
 
     @ExceptionHandler({ ApplicationException.class })
     @ResponseBody

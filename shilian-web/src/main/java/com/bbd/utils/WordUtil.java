@@ -166,29 +166,5 @@ public class WordUtil {
         }
         return format;
     }
-
-    /** 
-     * 将输入流中的数据写入字节数组 
-     * @param in 
-     * @return 
-     */
-    public static byte[] inputStream2ByteArray(InputStream in, boolean isClose) {
-        byte[] byteArray = null;
-        try {
-            int total = in.available();
-            byteArray = new byte[total];
-            in.read(byteArray);
-        } catch (IOException e) {
-            logger.error(e.getMessage(),e);
-        } finally {
-            if (isClose) {
-                try {
-                    in.close();
-                } catch (Exception e) {
-                    logger.error(e.getMessage(),e);
-                }
-            }
-        }
-        return byteArray;
-    }
+    
 }

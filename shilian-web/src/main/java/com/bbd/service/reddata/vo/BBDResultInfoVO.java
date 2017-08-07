@@ -27,7 +27,7 @@ public class BBDResultInfoVO implements Serializable {
     private String                        msg;
 
     /** 数据结果 */
-    private List<HashMap<String, Object>> results;
+    private transient List<HashMap<String, Object>> results;
 
     /** 当前返回的数据条数 */
     private String                        rsize;
