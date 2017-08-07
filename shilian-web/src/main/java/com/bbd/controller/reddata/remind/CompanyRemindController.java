@@ -152,6 +152,7 @@ public class CompanyRemindController extends AbstractController {
         // 验证提示类型、提示方式、企业nbxh是否为null
         ValidateUtil.checkAllNull(CommonErrorCode.PARAM_NULL, param.getType(), param.getMethod(), nbxhs);
         MsgTaskInfo info = BeanMapperUtil.map(param, MsgTaskInfo.class);
+        info.setConditions(param.getConditions().toString());
         info.setDistrict(String.valueOf(UserContext.getQuery().getAddr()));
 
         msgTaskService.addTaskWithNbxhs(info, Arrays.asList(nbxhs));
