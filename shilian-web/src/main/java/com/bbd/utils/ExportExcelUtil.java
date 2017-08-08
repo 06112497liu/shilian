@@ -142,7 +142,7 @@ public class ExportExcelUtil {
             if (i == count) {
                 subList = list.subList(i * 65000, 65000 * i + yu);
             } else {
-                subList = list.subList(i * 65000, 65000 * (i + 1) - 1);
+                subList = list.subList(i * 65000, 65000 * (i + 1));
             }
             map.put(i, subList);
         }
