@@ -46,6 +46,6 @@ public interface IMsgRemindService {
     /**
      * 找到最近的自动发送任务，并发送消息
      */
-    void sendByRecentAutoTask();
+    //    void sendByRecentAutoTask();
 
 }

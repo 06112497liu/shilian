@@ -78,7 +78,7 @@ public interface IJobService {
     /**
      * 发送queue中的短信
      */
-    void executeAutoRemindMessageSend();
+    //void executeAutoRemindMessageSend();
 
     /**
      * 通过任务，生成待发送的信息

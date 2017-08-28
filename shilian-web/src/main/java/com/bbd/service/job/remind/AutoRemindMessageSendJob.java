@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 @DisallowConcurrentExecution
 public class AutoRemindMessageSendJob extends QuartzJobBean {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger      logger = LoggerFactory.getLogger(getClass());
 
     @Resource
     private IJobService jobService;
@@ -30,7 +30,7 @@ public class AutoRemindMessageSendJob extends QuartzJobBean {
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         logger.info("Executing AutoRemindMessageSendJob");
 
-        jobService.executeAutoRemindMessageSend();
+        //jobService.executeAutoRemindMessageSend();
     }
 
 }

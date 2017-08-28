@@ -29,5 +29,5 @@ public interface IMessageService {
      * 发送消息提醒，用于自动提示。先发邮件，然后发短信，然后发语音
      * @param info
      */
-    void sendRemindMessage(RemindCompany info);
+    //void sendRemindMessage(RemindCompany info);
 }
