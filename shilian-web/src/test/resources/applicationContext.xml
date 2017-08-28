@@ -1,0 +1,16 @@
+<beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+    <!-- 配置文件 -->
+    <!--<context:property-placeholder location="classpath:swagger.properties" ignore-resource-not-found="true"
+                                  ignore-unresolvable="true"/>
+-->
+    <!-- 业务层配置文件 -->
+    <import resource="classpath*:biz.xml"/>
+    <import resource="redis.xml"/>
+    <import resource="dao.xml"/>
+
+</beans>
