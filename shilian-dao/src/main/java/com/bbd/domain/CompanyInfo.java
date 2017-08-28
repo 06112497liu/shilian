@@ -31,7 +31,7 @@ public class CompanyInfo {
 
     private Date gmtSuspend;
 
-    private String companyType;
+    private Integer companyType;
 
     private String registerNumber;
 
@@ -80,6 +80,12 @@ public class CompanyInfo {
     private String businessRecords;
 
     private Integer status;
+
+    private String zsxzqh;
+
+    private String keyIndustry;
+
+    private String lockReason;
 
     public Integer getId() {
         return id;
@@ -193,11 +199,11 @@ public class CompanyInfo {
         this.gmtSuspend = gmtSuspend;
     }
 
-    public String getCompanyType() {
+    public Integer getCompanyType() {
         return companyType;
     }
 
-    public void setCompanyType(String companyType) {
+    public void setCompanyType(Integer companyType) {
         this.companyType = companyType;
     }
 
@@ -391,5 +397,29 @@ public class CompanyInfo {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getZsxzqh() {
+        return zsxzqh;
+    }
+
+    public void setZsxzqh(String zsxzqh) {
+        this.zsxzqh = zsxzqh;
+    }
+
+    public String getKeyIndustry() {
+        return keyIndustry;
+    }
+
+    public void setKeyIndustry(String keyIndustry) {
+        this.keyIndustry = keyIndustry;
+    }
+
+    public String getLockReason() {
+        return lockReason;
+    }
+
+    public void setLockReason(String lockReason) {
+        this.lockReason = lockReason;
     }
 }

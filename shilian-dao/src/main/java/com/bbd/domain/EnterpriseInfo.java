@@ -81,6 +81,10 @@ public class EnterpriseInfo {
 
     private Integer status;
 
+    private String zsxzqh;
+
+    private String lockReason;
+
     public Integer getId() {
         return id;
     }
@@ -391,5 +395,21 @@ public class EnterpriseInfo {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getZsxzqh() {
+        return zsxzqh;
+    }
+
+    public void setZsxzqh(String zsxzqh) {
+        this.zsxzqh = zsxzqh;
+    }
+
+    public String getLockReason() {
+        return lockReason;
+    }
+
+    public void setLockReason(String lockReason) {
+        this.lockReason = lockReason;
     }
 }
