@@ -61,9 +61,10 @@ public class AutoRemindSettingController extends AbstractController {
      * @return               统一JSON数据
      */
     @ApiOperation(value = "新增提示周期", httpMethod = "GET")
-    @ApiImplicitParams({ @ApiImplicitParam(value = "提示类型( 1:企业年报提示, 2:失联企业提示, 3:未年报企业提示, 4:未公示企业提示, 5:虚假信息企业提示 )", name = "taskType", dataType = "Integer", paramType = "query", required = true),
-            @ApiImplicitParam(value = "任务运行日期（yyyy-MM-dd）", name = "runDate", dataType = "Integer", paramType = "query", required = true),
-            @ApiImplicitParam(value = "区域代码", name = "district", dataType = "Integer", paramType = "query", required = false) })
+    @ApiImplicitParams({ 
+        @ApiImplicitParam(value = "提示类型( 1:企业年报提示, 2:失联企业提示, 3:未年报企业提示, 4:未公示企业提示, 5:虚假信息企业提示 )", name = "taskType", dataType = "Integer", paramType = "query", required = true),
+        @ApiImplicitParam(value = "任务运行日期（yyyy-MM-dd）", name = "runDate", dataType = "Integer", paramType = "query", required = true),
+        @ApiImplicitParam(value = "区域代码", name = "district", dataType = "Integer", paramType = "query", required = false) })
     @RequestMapping(value = "/add.do", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public RestResult taskAdd(AutoRemindSettingParam params) {

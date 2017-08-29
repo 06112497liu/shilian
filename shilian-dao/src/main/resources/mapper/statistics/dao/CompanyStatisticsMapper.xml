@@ -39,21 +39,23 @@
 
     <!-- 企业总数（不含 吊销 和 52019999 的企业） -->
     <select id="selectCompanyTotalCountWithOutOthers" resultType="int">
-        select count(1) from
-        bbd_enterprise_info
+        select 
+        	count(1) 
+        from
+        	bbd_enterprise_info
         where 
-        district != '52019999'
+        	district != '52019999'
         <if test="district != null and district != '5201'">
             and district = #{district}
         </if>
-        and name_type != '8'
+        	and name_type != '8'
     </select>
     
     <!-- 企业总数（包含 吊销 和 52019999 的企业） -->
     <select id="selectCompanyTotalCount" resultType="int">
         select count(1) from
         bbd_enterprise_info
-        where 
+        where 1=1
         <if test="district != null and district != '5201'">
             and district = #{district}
         </if>

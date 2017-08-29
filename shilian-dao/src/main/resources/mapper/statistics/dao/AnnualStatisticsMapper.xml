@@ -82,7 +82,7 @@
         FROM bbd_enterprise_info
         WHERE annual_state = 1
         AND district != '52019999'
-        AND name_type = '8'
+        AND name_type != '8'
         GROUP BY district
     </select>
 

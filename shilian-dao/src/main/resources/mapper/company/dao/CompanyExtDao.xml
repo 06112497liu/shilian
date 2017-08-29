@@ -192,11 +192,16 @@
 
     <!-- 查询贵阳市各区域企业数量 -->
     <select id="selectCompanyGroupByDistrict" resultType="com.bbd.bean.statistics.NameValueInfo">
-        SELECT district as name, count(1) as value
-        FROM bbd_enterprise_info
-        AND district != '52019999'
-        AND name_type != '8'
-        GROUP BY district
+        SELECT 
+        	district as name, count(1) as value
+        FROM 
+        	bbd_enterprise_info
+       	WHERE	
+        	district != '52019999'
+        AND 
+        	name_type != '8'
+        GROUP 
+        	BY district
     </select>
 
     <!-- 查询贵阳市各区域应年报企业数量 -->

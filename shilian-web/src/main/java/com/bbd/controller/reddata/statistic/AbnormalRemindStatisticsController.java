@@ -64,7 +64,7 @@ public class AbnormalRemindStatisticsController extends AbstractController {
         // 异常企业数量
         Integer abnormalCount = companyStatisticsService.queryPartialAbnormalCount(abnormalState, district);
         // 企业总量
-        Integer total = companyStatisticsService.getCompanyTotalCount(district);
+        Integer total = companyStatisticsService.getCompanyTotalCountWithOutOthers(district);
         Integer shouldAnnual = 0;
         // 如果查询的是有关年报的，要查询应年报企业总量
         if(abnormalState == 1) {
