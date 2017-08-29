@@ -56,6 +56,8 @@
         <include refid="Base_Column_List"/>
         from bbd_enterprise_info
         where (abnormal_state div #{abnormalState}) mod 2 = 1
+        and district != '52019999'
+        and name_type = '8'
         <if test="companyName != null">
             and company_name like #{companyName}
         </if>
@@ -103,6 +105,8 @@
         c.nbxh = a.nbxh
         and a.type = 4
         and a.delete_flag = 0
+        and c.district != '52019999'
+        and c.name_type != '8'
         <if test="companyProperty != null">
             and c.company_property = #{companyProperty}
         </if>
@@ -132,7 +136,8 @@
         c.district,
         c.primary_industry_initial as primaryIndustryInitial,
         c.index_score as indexScore,
-        c.business_records as businessType
+        c.business_records as businessType,
+        c.lock_reason as lockReason
         FROM
         bbd_enterprise_info c
         WHERE 1=1
@@ -189,6 +194,8 @@
     <select id="selectCompanyGroupByDistrict" resultType="com.bbd.bean.statistics.NameValueInfo">
         SELECT district as name, count(1) as value
         FROM bbd_enterprise_info
+        AND district != '52019999'
+        AND name_type != '8'
         GROUP BY district
     </select>
 

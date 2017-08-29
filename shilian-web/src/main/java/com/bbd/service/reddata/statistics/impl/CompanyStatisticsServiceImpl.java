@@ -83,12 +83,21 @@ public class CompanyStatisticsServiceImpl implements ICompanyStatisticsService {
     }
 
     /**
-     * 获取贵阳市的企业总量
+     * 获取贵阳市的企业总量（去除 吊销 和 52019999 的企业）
      */
     @Override
     @Cacheable(value = CacheConstants.STATISTIC_COMPANY, keyGenerator = "simpleKeyGenerator")
     public Integer getCompanyTotalCount(String district) {
         return companyStatisticsDao.selectCompanyTotalCount(district);
+    }
+    
+    /**
+     * 获取企业总数（包含 吊销 和 52019999 的企业）
+     */
+    @Override
+    @Cacheable(value = CacheConstants.STATISTIC_COMPANY, keyGenerator = "simpleKeyGenerator")
+    public Integer getCompanyTotalCountWithOutOthers(String district) {
+        return companyStatisticsDao.selectCompanyTotalCountWithOutOthers(district);
     }
 
     /**
@@ -142,24 +151,22 @@ public class CompanyStatisticsServiceImpl implements ICompanyStatisticsService {
         List<CompanyAddrStaticInfo> infos = annualStatisticsDao.selectAnnualedCompanyDistribute();
         Map<String, Long> disCount = companyUtil.getShouldAnnualCoutByDistrict();
         List<CompanyAddrStaticInfo> result = transferCompanyAddr(infos, disCount);
-
         // 转区域编码为中文
         addDistrictDescForCompanyAddr(result);
-
         // 补全数据
         fillDestrictData(result);
-
         return result;
     }
 
     /**
      * 补全没有数据的区域
-     *
+     *  @param type 1-关于年报的（如果为1，表示移除其他的数据）
      * @param list
      */
     private void fillDestrictData(List<CompanyAddrStaticInfo> list) {
         Map<String, String> dsMap = addressService.getDistrictCodeMap(Constants.GUIYANG_CODE);
         Set<String> districts = dsMap.keySet();
+        if(!districts.isEmpty()) districts.remove("52019999");
         Set<String> listDis = Sets.newHashSet();
 
         for (int i = 0; i < list.size(); i++) {

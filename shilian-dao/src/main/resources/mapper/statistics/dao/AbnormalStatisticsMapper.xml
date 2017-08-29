@@ -24,6 +24,8 @@
         <if test="district != null and district != '5201'">
             and district = #{district}
         </if>
+        and district != '52019999'
+        and name_type != '8'
     </select>
 
     <select id="queryAbnormalCompanyDistribute"
@@ -32,6 +34,8 @@
         FROM bbd_enterprise_info
         WHERE 
         (abnormal_state div #{abnormalState}) mod 2 = 1
+        AND district != '52019999'
+        AND name_type != '8'
         GROUP BY district
         ORDER BY COUNT(1) DESC
     </select>
@@ -43,8 +47,10 @@
         WHERE (abnormal_state div #{abnormalState}) mod 2 = 1
         AND primary_industry_initial IS NOT NULL
         <if test="district != null and district != '5201'">
-            and district = #{district}
+            AND district = #{district}
         </if>
+        AND district != '52019999'
+        AND name_type != '8'
         GROUP BY primary_industry_initial
         ORDER BY COUNT(1) DESC
     </select>
@@ -55,8 +61,10 @@
         FROM bbd_enterprise_info
         WHERE (abnormal_state div #{abnormalState}) mod 2 = 1 
         <if test="district != null and district != '5201'">
-            and district = #{district}
+            AND district = #{district}
         </if>
+        AND district != '52019999'        
+        AND name_type != '8'
         GROUP BY company_property
         ORDER BY COUNT(1) DESC
     </select>
@@ -72,6 +80,8 @@
         <if test="abnormalState != null">
             and (c.abnormal_state div #{abnormalState}) mod 2 = 1
         </if>
+        AND c.district != '52019999'
+        AND c.name_type != '8'
     </select>
 
     <select id="queryAbnormalMonthRemoveCount" resultType="int">
@@ -83,6 +93,8 @@
         <if test="abnormalState != null">
             and (c.abnormal_state div #{abnormalState}) mod 2 = 1
         </if>
+        AND c.district != '52019999'
+        AND c.name_type != '8'
     </select>
     
     <select id="queryAbnormalMonthAddCount" resultType="int">
@@ -95,5 +107,12 @@
         <if test="abnormalState != null">
             and (c.abnormal_state div #{abnormalState}) mod 2 = 1
         </if>
+        AND c.district != '52019999'
+        AND c.name_type != '8'       
     </select>
 </mapper>
+
+
+
+
+

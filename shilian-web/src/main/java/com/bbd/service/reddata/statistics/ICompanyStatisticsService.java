@@ -24,11 +24,19 @@ public interface ICompanyStatisticsService {
     CompanyDataCountInfo getCompanyDataCountInfo();
 
     /**
-     * 获取企业总数
+     * 获取企业总数（去除 吊销 和 52019999 的企业）
      *
      * @return
      */
     Integer getCompanyTotalCount(String district);
+    
+    /**
+     * 获取企业总数（包含 吊销 和 52019999 的企业）
+     *
+     * @param district
+     * @return
+     */
+    Integer getCompanyTotalCountWithOutOthers(String district);
 
     /**
      * 获取已年报企业数量
