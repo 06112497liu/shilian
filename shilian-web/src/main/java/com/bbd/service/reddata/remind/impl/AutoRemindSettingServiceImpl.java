@@ -48,7 +48,7 @@ public class AutoRemindSettingServiceImpl implements IAutoRemindSettingService {
     @Override
     public Integer add(AutoRemindSettingParam info) {
         BaseQuery query = UserContext.getQuery();
-        String operator = query == null ? "5201" : String.valueOf(query.getAddr());
+        String operator = (query == null ? "5201" : String.valueOf(query.getAddr()));
 
         // 判断运行时间是否小于系统当前时间
         if (!checkRundate(info.getRunDate())) {

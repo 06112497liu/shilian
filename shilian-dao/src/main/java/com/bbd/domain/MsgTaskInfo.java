@@ -35,6 +35,8 @@ public class MsgTaskInfo {
 
     private String district;
 
+    private String operator;
+
     public Integer getId() {
         return id;
     }
@@ -161,5 +163,13 @@ public class MsgTaskInfo {
 
     public void setDistrict(String district) {
         this.district = district;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 }
