@@ -74,7 +74,7 @@ public class CompanyActivityServiceImpl implements ICompanyActivityService {
         dateTime = dateTime.plusMonths(-1);
 
         if (year == dateTime.getYear() && month == dateTime.getMonthOfYear()) {
-            companyService.syncBusinessRecord(year, month);
+            // companyService.syncBusinessRecord(year, month);
             // 更新bbd_enterprise_info的指数
             companyExtDao.updateCompanyIndexScore(year, month);
             // 更新bbd_enterprise_info的经营活动
