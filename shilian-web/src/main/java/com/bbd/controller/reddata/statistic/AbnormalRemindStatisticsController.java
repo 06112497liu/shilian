@@ -49,23 +49,32 @@ public class AbnormalRemindStatisticsController extends AbstractController {
      * @return               统一JSON数据
      */
     @ApiOperation(value = "异常企业数量统计信息", httpMethod = "GET")
-    @ApiImplicitParams({ @ApiImplicitParam(value = "区域编码", name = "district", dataType = "String", paramType = "query", required = false),
-            @ApiImplicitParam(value = "异常类型（1-未年报 2-未公示 4-虚假信息 8-失联）", name = "abnormalState", dataType = "Integer", paramType = "query", required = true) })
+    @ApiImplicitParams({ 
+        @ApiImplicitParam(value = "区域编码", name = "district", dataType = "String", paramType = "query", required = false),
+        @ApiImplicitParam(value = "异常类型（1-未年报 2-未公示 4-虚假信息 8-失联）", name = "abnormalState", dataType = "Integer", paramType = "query", required = true) })
     @RequestMapping(value = "/total/info.do", method = RequestMethod.GET)
     public RestResult getTotalInfo(String district, Integer abnormalState) {
+        
         ValidateUtil.checkNull(abnormalState, CommonErrorCode.PARAM_NULL);
+        Map<String, Object> map = Maps.newHashMap();
+        
         if (StringUtils.isBlank(district)) {
             district = "5201";
         }
         // 异常企业数量
         Integer abnormalCount = companyStatisticsService.queryPartialAbnormalCount(abnormalState, district);
         // 企业总量
-        Integer total = companyStatisticsService.getCompanyTotalCount(district);
-
-        Map<String, Object> map = Maps.newHashMap();
+        Integer total = companyStatisticsService.getCompanyTotalCountWithOutOthers(district);
+        Integer shouldAnnual = 0;
+        // 如果查询的是有关年报的，要查询应年报企业总量
+        if(abnormalState == 1) {
+            shouldAnnual = companyStatisticsService.getAnnualCompanyCount(district);
+            map.put("percent", PercentUtil.calcIntPercent(shouldAnnual, abnormalCount));
+        } else {
+            map.put("percent", PercentUtil.calcIntPercent(total, abnormalCount));
+        }
         map.put("total", total);
         map.put("abnormal", abnormalCount);
-        map.put("percent", PercentUtil.calcIntPercent(total, abnormalCount));
         return RestResult.ok(map);
     }
 
@@ -74,8 +83,10 @@ public class AbnormalRemindStatisticsController extends AbstractController {
      * @return               统一JSON数据
      */
     @ApiOperation(value = "异常企业数量", httpMethod = "GET")
-    @ApiImplicitParams({ @ApiImplicitParam(value = "区域编码", name = "district", dataType = "String", paramType = "query", required = true),
-            @ApiImplicitParam(value = "异常类型（1-未年报 2-未公示 4-虚假信息 8-失联）", name = "abnormalState", dataType = "Integer", paramType = "query", required = true) })
+    @ApiImplicitParams({ 
+        @ApiImplicitParam(value = "区域编码", name = "district", dataType = "String", paramType = "query", required = true),
+        @ApiImplicitParam(value = "异常类型（1-未年报 2-未公示 4-虚假信息 8-失联）", name = "abnormalState", dataType = "Integer", paramType = "query", required = true) 
+    })
     @RequestMapping(value = "/total.do", method = RequestMethod.GET)
     public RestResult getTotal(Integer abnormalState, String district) {
         ValidateUtil.checkAllNull(CommonErrorCode.PARAM_NULL, abnormalState, district);
@@ -89,7 +100,9 @@ public class AbnormalRemindStatisticsController extends AbstractController {
      * @return               统一JSON数据
      */
     @ApiOperation(value = "异常企业区域分布", httpMethod = "GET")
-    @ApiImplicitParams({ @ApiImplicitParam(value = "异常类型（1-未年报 2-未公示 4-虚假信息 8-失联）", name = "abnormalState", dataType = "Integer", paramType = "query", required = true) })
+    @ApiImplicitParams({ 
+        @ApiImplicitParam(value = "异常类型（1-未年报 2-未公示 4-虚假信息 8-失联）", name = "abnormalState", dataType = "Integer", paramType = "query", required = true) 
+    })
     @RequestMapping(value = "/area/distribute.do", method = RequestMethod.GET)
     public RestResult getAreaDistribute(Integer abnormalState) {
         ValidateUtil.checkNull(abnormalState, CommonErrorCode.PARAM_NULL);
@@ -112,8 +125,10 @@ public class AbnormalRemindStatisticsController extends AbstractController {
      * @return               统一JSON数据
      */
     @ApiOperation(value = "异常企业一级行业分布", httpMethod = "GET")
-    @ApiImplicitParams({ @ApiImplicitParam(value = "异常类型（1-未年报 2-未公示 4-虚假信息 8-失联）", name = "abnormalState", dataType = "Integer", paramType = "query", required = true),
-            @ApiImplicitParam(value = "区域编码", name = "district", dataType = "String", paramType = "query", required = true) })
+    @ApiImplicitParams({ 
+        @ApiImplicitParam(value = "异常类型（1-未年报 2-未公示 4-虚假信息 8-失联）", name = "abnormalState", dataType = "Integer", paramType = "query", required = true),
+        @ApiImplicitParam(value = "区域编码", name = "district", dataType = "String", paramType = "query", required = true) 
+    })
     @RequestMapping(value = "/industry/distribute.do", method = RequestMethod.GET)
     public RestResult getIndustryDistribute(Integer abnormalState, String district) {
         ValidateUtil.checkAllNull(CommonErrorCode.PARAM_NULL, abnormalState, district);

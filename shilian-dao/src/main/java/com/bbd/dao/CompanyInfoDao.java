@@ -3,9 +3,8 @@ package com.bbd.dao;
 import com.bbd.domain.CompanyInfo;
 import com.bbd.domain.CompanyInfoExample;
 import com.mybatis.domain.PageBounds;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface CompanyInfoDao {
     int deleteByPrimaryKey(Integer id);

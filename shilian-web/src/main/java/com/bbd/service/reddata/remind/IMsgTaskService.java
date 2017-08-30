@@ -4,11 +4,11 @@
  */
 package com.bbd.service.reddata.remind;
 
-import java.util.List;
-
 import com.bbd.domain.MsgTaskInfo;
 import com.bbd.service.reddata.remind.param.MsgTaskQueryVO;
 import com.mybatis.domain.PageList;
+
+import java.util.List;
 
 /**
  * 消息发送任务服务
@@ -108,7 +108,7 @@ public interface IMsgTaskService {
      *
      * @return
      */
-    MsgTaskInfo getFirstAutoSendingTask();
+    // MsgTaskInfo getFirstAutoSendingTask();
 
     /**
      * 获取未执行的任务

@@ -34,6 +34,8 @@
         <if test="district != null and district != '5201'">
             and district = #{district}
         </if>
+        AND district != '52019999'
+        AND name_type != '8'        
     </select>
 
     <!-- 当前应年报企业数量 -->
@@ -46,6 +48,8 @@
         <if test="district != null and district != '5201'">
             AND district = #{district}
         </if>
+        AND district != '52019999'
+        AND name_type != '8'
     </select>
 
     <select id="selectUnannualedCount" resultType="int">
@@ -57,15 +61,19 @@
         <if test="district != null and district != '5201'">
             AND district = #{district}
         </if>
+        AND district != '52019999'
+        AND name_type != '8'
     </select>
 
     <select id="selectAnnualedCurrentMonthCount" resultType="int">
         SELECT COUNT(1) FROM bbd_annual_info a, bbd_enterprise_info c
         WHERE a.nbxh = c.nbxh
         <if test="district != null and district != '5201'">
-            and c.district = #{district}
+            AND c.district = #{district}
         </if>
         AND YEAR(a.gmt_annual)=#{year} AND MONTH(a.gmt_annual) = #{month}
+        AND c.district != '52019999' 
+        AND c.name_type != '8'
     </select>
 
     <select id="selectAnnualedCompanyDistribute"
@@ -73,6 +81,8 @@
         SELECT district as name, COUNT(1) as value, district as code
         FROM bbd_enterprise_info
         WHERE annual_state = 1
+        AND district != '52019999'
+        AND name_type != '8'
         GROUP BY district
     </select>
 
@@ -85,6 +95,8 @@
         <if test="district != null and district != '5201'">
             and district = #{district}
         </if>
+        AND district != '52019999'
+        AND name_type != '8'
         GROUP BY primary_industry_initial
         ORDER BY COUNT(1) DESC
     </select>
@@ -97,6 +109,8 @@
         <if test="district != null and district != '5201'">
             AND district = #{district}
         </if>
+        AND district != '52019999'
+        AND name_type != '8'        
         GROUP BY company_property
         ORDER BY COUNT(1) DESC
     </select>

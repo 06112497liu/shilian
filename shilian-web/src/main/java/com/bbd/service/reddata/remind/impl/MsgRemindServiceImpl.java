@@ -204,23 +204,23 @@ public class MsgRemindServiceImpl implements IMsgRemindService {
         }
     }
 
-    @Override
-    public void sendByRecentAutoTask() {
-        MsgTaskInfo task = msgTaskService.getFirstAutoSendingTask();
-        if (task == null) {
-            return;
-        }
-        Integer taskId = task.getId();
-        while (true) {
-            List<RemindCompany> list = companyRemindQueueExtDao.getQueuedTaskRemindCompanyInfos(taskId);
-            if (list.size() == 0) {
-                msgTaskService.finishTask(taskId);
-                return;
-            }
-
-            for (RemindCompany rc : list) {
-                messageService.sendRemindMessage(rc);
-            }
-        }
-    }
+    //    @Override
+    //    public void sendByRecentAutoTask() {
+    //        MsgTaskInfo task = msgTaskService.getFirstAutoSendingTask();
+    //        if (task == null) {
+    //            return;
+    //        }
+    //        Integer taskId = task.getId();
+    //        while (true) {
+    //            List<RemindCompany> list = companyRemindQueueExtDao.getQueuedTaskRemindCompanyInfos(taskId);
+    //            if (list.size() == 0) {
+    //                msgTaskService.finishTask(taskId);
+    //                return;
+    //            }
+    //
+    //            for (RemindCompany rc : list) {
+    //                messageService.sendRemindMessage(rc);
+    //            }
+    //        }
+    //    }
 }

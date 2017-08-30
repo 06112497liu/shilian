@@ -27,24 +27,23 @@ import javax.annotation.Resource;
 @Service
 public class JobServiceImpl implements IJobService {
 
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
-    @Resource
-    private IMsgRemindService msgRemindService;
+    private Logger                  logger = LoggerFactory.getLogger(getClass());
 
     @Resource
-    private ICompanyRemindService companyRemindStatisticService;
+    private IMsgRemindService       msgRemindService;
 
     @Resource
-    private IMsgTaskService msgTaskService;
+    private ICompanyRemindService   companyRemindStatisticService;
+
     @Resource
-    private IEsService esService;
+    private IMsgTaskService         msgTaskService;
+    @Resource
+    private IEsService              esService;
     @Resource
     private ICompanyActivityService companyActivityService;
 
     @Resource
-    private ICompanyService companyService;
+    private ICompanyService         companyService;
 
     @Override
     @ScheduleTask(name = "AnnualRemindManualEmailSendJob", recordFrequence = 10)
@@ -132,11 +131,11 @@ public class JobServiceImpl implements IJobService {
         msgTaskService.generateAutoRemindTask();
     }
 
-    @Override
-    @ScheduleTask(name = "AutoRemindMessageSendJob", recordFrequence = 10)
-    public void executeAutoRemindMessageSend() {
-        msgRemindService.sendByRecentAutoTask();
-    }
+    //    @Override
+    //    @ScheduleTask(name = "AutoRemindMessageSendJob", recordFrequence = 10)
+    //    public void executeAutoRemindMessageSend() {
+    //        msgRemindService.sendByRecentAutoTask();
+    //    }
 
     @Override
     @ScheduleTask(name = "TaskMessageDetailGenerateJob", recordFrequence = 10)

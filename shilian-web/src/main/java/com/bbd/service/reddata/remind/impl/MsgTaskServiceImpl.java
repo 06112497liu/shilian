@@ -229,24 +229,24 @@ public class MsgTaskServiceImpl implements IMsgTaskService {
         return result;
     }
 
-    @Override
-    public MsgTaskInfo getFirstAutoSendingTask() {
-        MsgTaskInfo result = null;
-
-        MsgTaskInfoExample exam = new MsgTaskInfoExample();
-        MsgTaskInfoExample.Criteria c = exam.createCriteria();
-        c.andOperationTypeEqualTo(MessageTaskConstants.AUTO).andStartTimeIsNotNull().andEndTimeIsNull();
-        exam.setOrderByClause("gmt_create asc");
-
-        PageBounds pb = new PageBounds(1, 1, false);
-
-        List<MsgTaskInfo> ds = msgTaskInfoDao.selectByExampleWithPageBounds(exam, pb);
-        if (ds.size() > 0) {
-            result = ds.get(0);
-        }
-
-        return result;
-    }
+    //    @Override
+    //    public MsgTaskInfo getFirstAutoSendingTask() {
+    //        MsgTaskInfo result = null;
+    //
+    //        MsgTaskInfoExample exam = new MsgTaskInfoExample();
+    //        MsgTaskInfoExample.Criteria c = exam.createCriteria();
+    //        c.andOperationTypeEqualTo(MessageTaskConstants.AUTO).andStartTimeIsNotNull().andEndTimeIsNull();
+    //        exam.setOrderByClause("gmt_create asc");
+    //
+    //        PageBounds pb = new PageBounds(1, 1, false);
+    //
+    //        List<MsgTaskInfo> ds = msgTaskInfoDao.selectByExampleWithPageBounds(exam, pb);
+    //        if (ds.size() > 0) {
+    //            result = ds.get(0);
+    //        }
+    //
+    //        return result;
+    //    }
 
     @Override
     public List<MsgTaskInfo> getUnfiredTasks() {
@@ -283,12 +283,25 @@ public class MsgTaskServiceImpl implements IMsgTaskService {
     private void createTaskByAutoReminSetting(int settingId) {
         AutoRemindSettingInfo s = autoRemindSettingService.getById(settingId);
 
+        MsgTaskInfo emailInfo = createAutoRemainTask(s, MessageTaskConstants.EMAIL_METHOD);
+        MsgTaskInfo smsInfo = createAutoRemainTask(s, MessageTaskConstants.SMS_METHOD);
+
+        msgTaskInfoDao.insertSelective(emailInfo);
+        msgTaskInfoDao.insertSelective(smsInfo);
+    }
+
+    /**
+     * 生成不同发送方式的任务
+     * @param s
+     */
+    private MsgTaskInfo createAutoRemainTask(AutoRemindSettingInfo s, int method) {
         Date runDate = s.getRunDate();
         DateTime d = new DateTime(runDate);
         int year = d.getYear();
 
         MsgTaskInfo info = new MsgTaskInfo();
         info.setEnabled(true);
+        info.setMethod(method);
         info.setType(s.getTaskType());
         info.setOperationType(MessageTaskConstants.AUTO);
         info.setSendTime(s.getRunDate());
@@ -298,7 +311,7 @@ public class MsgTaskServiceImpl implements IMsgTaskService {
         condition.setDistrict(s.getDistrict());
         info.setConditions(ObjectMapperUtil.write(condition));
 
-        msgTaskInfoDao.insertSelective(info);
+        return info;
     }
 
     @Override

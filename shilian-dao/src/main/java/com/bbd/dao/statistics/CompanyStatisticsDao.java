@@ -19,8 +19,16 @@ public interface CompanyStatisticsDao {
     long getDataCount();
 
     /**
-     * 查询企业的总数目 带权限
+     * 查询企业的总数目（含 吊销 和 52019999 的企业）
      */
+    
     Integer selectCompanyTotalCount(@Param("district") String district);
+    /**
+     * 查询企业的总数目（不含 吊销 和 52019999 的企业）
+     *
+     * @param district
+     * @return
+     */
+    Integer selectCompanyTotalCountWithOutOthers(@Param("district") String district);
 
 }

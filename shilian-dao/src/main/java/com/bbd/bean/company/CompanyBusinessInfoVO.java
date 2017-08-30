@@ -57,7 +57,10 @@ public class CompanyBusinessInfoVO {
     private String  businessType;
 
     @ExcelRow("经营活动记录")
-    private String  businessTypeDesc;
+    private String businessTypeDesc;
+    
+    @ExcelRow("锁入原因")
+    private String lockReason;
 
     public String getBusinessTypeDesc() {
         return businessTypeDesc;
@@ -105,6 +108,14 @@ public class CompanyBusinessInfoVO {
 
     public void setNbxh(String nbxh) {
         this.nbxh = nbxh;
+    }
+    
+    public String getLockReason() {
+        return lockReason;
+    }
+
+    public void setLockReason(String lockReason) {
+        this.lockReason = lockReason;
     }
 
     public String getPrimaryIndustryInitial() {

@@ -31,16 +31,16 @@ import java.util.List;
 public class CompanyActivityServiceImpl implements ICompanyActivityService {
 
     @Resource
-    private CompanyExtDao companyExtDao;
+    private CompanyExtDao                  companyExtDao;
 
     @Resource
-    private CompanyActivityDao companyActivityDao;
+    private CompanyActivityDao             companyActivityDao;
 
     @Resource
     private BusinessMonthStatisticsInfoDao businessMonthStatisticsInfoDao;
 
     @Resource
-    private ICompanyService companyService;
+    private ICompanyService                companyService;
 
     @Override
     public void generateMonthStatistic(int year, int month) {
@@ -54,7 +54,6 @@ public class CompanyActivityServiceImpl implements ICompanyActivityService {
         companyActivityDao.updateActivityExponentWithoutAnnual(year, month);
         companyActivityDao.updateActivityExponentByAnnual(year, month);
         companyActivityDao.updateCompanyActivityType(year, month);
-        companyService.syncBusinessRecord(year, month);
 
         doUpdateCompanyBusinessInfo(year, month);
     }
@@ -75,6 +74,7 @@ public class CompanyActivityServiceImpl implements ICompanyActivityService {
         dateTime = dateTime.plusMonths(-1);
 
         if (year == dateTime.getYear() && month == dateTime.getMonthOfYear()) {
+            companyService.syncBusinessRecord(year, month);
             // 更新bbd_enterprise_info的指数
             companyExtDao.updateCompanyIndexScore(year, month);
             // 更新bbd_enterprise_info的经营活动

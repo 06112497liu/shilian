@@ -351,21 +351,21 @@ public class MessageServiceImpl implements IMessageService {
         return vo;
     }
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void sendRemindMessage(RemindCompany info) {
-        int taskId = info.getTaskId();
-        int status = doSendRemindEmail(info);
-        if (status > 0) {
-            boolean succes = doSendRemindSms(info);
-            deleteQueuedRemindMsg(info.getQueueId());
-            if (succes) {
-                msgTaskService.increaseSuccess(taskId);
-            } else {
-                msgTaskService.increaseFail(taskId);
-            }
-        }
-    }
+    //    @Override
+    //    @Transactional(rollbackFor = Exception.class)
+    //    public void sendRemindMessage(RemindCompany info) {
+    //        int taskId = info.getTaskId();
+    //        int status = doSendRemindEmail(info);
+    //        if (status > 0) {
+    //            boolean succes = doSendRemindSms(info);
+    //            deleteQueuedRemindMsg(info.getQueueId());
+    //            if (succes) {
+    //                msgTaskService.increaseSuccess(taskId);
+    //            } else {
+    //                msgTaskService.increaseFail(taskId);
+    //            }
+    //        }
+    //    }
 
     /**
      * 根据提示类型获取短信模板

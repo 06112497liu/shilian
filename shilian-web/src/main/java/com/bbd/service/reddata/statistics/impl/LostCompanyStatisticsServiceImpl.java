@@ -215,6 +215,7 @@ public class LostCompanyStatisticsServiceImpl implements ILostCompanyStatisticsS
         }
 
         Map<String, String> districtMap = addressService.getDistrictCodeMap(Constants.GUIYANG_CODE);
+        if(!districtMap.isEmpty()) districtMap.remove("52019999"); 
         Map<String, String> industryMap = companyUtil.getPrimaryIndustryMap();
         Map<String, String> propertyMap = companyUtil.getCompanyPropertyMap();
 
@@ -312,7 +313,7 @@ public class LostCompanyStatisticsServiceImpl implements ILostCompanyStatisticsS
         int year = dateTime.getYear();
         int month = dateTime.getMonthOfYear();
         //企业总量
-        Integer companyTotal = companyStatisticsDao.selectCompanyTotalCount(district);
+        Integer companyTotal = companyStatisticsDao.selectCompanyTotalCountWithOutOthers(district);
         //失联企业总量
         Integer total = companyStatisticsService.queryPartialAbnormalCount(8, district);
         //新增失联企业数量

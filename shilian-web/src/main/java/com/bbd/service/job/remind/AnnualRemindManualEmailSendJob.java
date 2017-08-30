@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 @DisallowConcurrentExecution
 public class AnnualRemindManualEmailSendJob extends QuartzJobBean {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger      logger = LoggerFactory.getLogger(getClass());
 
     @Resource
     private IJobService jobService;
