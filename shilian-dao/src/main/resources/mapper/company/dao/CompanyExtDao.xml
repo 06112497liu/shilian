@@ -57,7 +57,7 @@
         from bbd_enterprise_info
         where (abnormal_state div #{abnormalState}) mod 2 = 1
         and district != '52019999'
-        and name_type = '8'
+        and name_type != '8'
         <if test="companyName != null">
             and company_name like #{companyName}
         </if>
