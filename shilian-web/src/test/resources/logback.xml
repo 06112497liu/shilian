@@ -11,7 +11,7 @@
     <!-- 文件日志 -->
     <appender name="ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%date{yyyy‐MM‐dd HH:mm:ss}||%thread||%level||%logger:%line||%msg %ex||%n</pattern>
         </encoder>
         <file>${LOG_HOME}/all.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -25,7 +25,7 @@
     <!-- sql -->
     <appender name="sql" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%date{yyyy‐MM‐dd HH:mm:ss}||%thread||%level||%logger:%line||%msg %ex||%n</pattern>
         </encoder>
         <file>${LOG_HOME}/sql.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
