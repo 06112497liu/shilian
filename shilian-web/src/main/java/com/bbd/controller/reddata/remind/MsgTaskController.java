@@ -51,12 +51,14 @@ public class MsgTaskController extends AbstractController {
      * @return 统一JSON数据
      */
     @ApiOperation(value = "查询提示进度列表", httpMethod = "GET")
-    @ApiImplicitParams({ @ApiImplicitParam(value = "页号", name = "page", dataType = "Integer", paramType = "query", required = false),
+    @ApiImplicitParams({ 
+            @ApiImplicitParam(value = "页号", name = "page", dataType = "Integer", paramType = "query", required = false),
             @ApiImplicitParam(value = "分页大小", name = "limit", dataType = "Integer", paramType = "query", required = false),
             @ApiImplicitParam(value = "提示类型（ 1.企业年报提示, 2.失联企业提示, 3.未年报企业提示, 4.未公示企业提示, 5.虚假信息企业提示  ）", name = "taskType", dataType = "Integer", paramType = "query", required = true),
             @ApiImplicitParam(value = "操作类型（  0.自动, 1.手动  ）", name = "operationType", dataType = "Integer", paramType = "query", required = false),
             @ApiImplicitParam(value = "提示方式（ 1.邮件, 2.短信, 3.语音  ）", name = "method", dataType = "Integer", paramType = "query", required = false),
-            @ApiImplicitParam(value = "提示时间排序方式（ 1.降序, 2.升序 ）", name = "order", dataType = "Integer", paramType = "query", required = false) })
+            @ApiImplicitParam(value = "提示时间排序方式（ 1.降序, 2.升序 ）", name = "order", dataType = "Integer", paramType = "query", required = false) 
+    })
     @RequestMapping(value = "/schedule.do", method = RequestMethod.GET)
     public RestResult getMsgTaskList(MsgTaskQueryParam query) {
         // 验证是提示类型是否为null
@@ -71,7 +73,9 @@ public class MsgTaskController extends AbstractController {
      * @return 统一JSON数据
      */
     @ApiOperation(value = "查询企业提示详情列表", httpMethod = "GET")
-    @ApiImplicitParams({ @ApiImplicitParam(value = "企业nbxh", name = "nbxh", dataType = "Integer", paramType = "query", required = true) })
+    @ApiImplicitParams({ 
+        @ApiImplicitParam(value = "企业nbxh", name = "nbxh", dataType = "Integer", paramType = "query", required = true) 
+    })
     @RequestMapping(value = "/detail.do", method = RequestMethod.GET)
     public RestResult getRemindDetailList(String nbxh) {
         // 验证是企业nbxh是否为null
@@ -86,9 +90,11 @@ public class MsgTaskController extends AbstractController {
      * @return 统一JSON数据
      */
     @ApiOperation(value = "查询提醒任务列表", httpMethod = "GET")
-    @ApiImplicitParams({ @ApiImplicitParam(value = "区域编码", name = "district", dataType = "String", paramType = "query", required = false),
-            @ApiImplicitParam(value = "类型（1.年报， 2.失联， 3.未年报， 4.未公示， 5.虚假信息）", name = "type", dataType = "Integer", paramType = "query", required = true),
-            @ApiImplicitParam(value = "总条数-第几次-1", name = "page", dataType = "Integer", paramType = "query", required = false) })
+    @ApiImplicitParams({ 
+        @ApiImplicitParam(value = "区域编码", name = "district", dataType = "String", paramType = "query", required = false),
+        @ApiImplicitParam(value = "类型（1.年报， 2.失联， 3.未年报， 4.未公示， 5.虚假信息）", name = "type", dataType = "Integer", paramType = "query", required = true),
+        @ApiImplicitParam(value = "总条数-第几次-1", name = "page", dataType = "Integer", paramType = "query", required = false) 
+    })
     @RequestMapping(value = "/last/list.do", method = RequestMethod.GET)
     public RestResult getMsgTaskList(String district, Integer type, Integer page) {
         ValidateUtil.checkNull(type, CommonErrorCode.PARAM_NULL);

@@ -116,13 +116,15 @@ public class CompanyRemindController extends AbstractController {
      * @return               统一JSON数据
      */
     @ApiOperation(value = "一键提示", httpMethod = "GET")
-    @ApiImplicitParams({ @ApiImplicitParam(value = "提示类型（1.企业年报提示,2.失联企业提示,3.未年报企业提示,4.未公示企业提示,5.虚假信息企业提示）", name = "type", dataType = "Integer", paramType = "query", required = true),
-            @ApiImplicitParam(value = "提示方式(1.邮件,2.短信,3.语音)", name = "method", dataType = "Integer", paramType = "query", required = true),
-            @ApiImplicitParam(value = "企业名称", name = "conditions.companyName", dataType = "Integer", paramType = "query", required = false),
-            @ApiImplicitParam(value = "区域", name = "conditions.district", dataType = "Integer", paramType = "query", required = true),
-            @ApiImplicitParam(value = "一级行业", name = "conditions.primaryIndustry", dataType = "Integer", paramType = "query", required = false),
-            @ApiImplicitParam(value = "经营活动指数开始", name = "conditions.indexScoreFrom", dataType = "Integer", paramType = "query", required = false),
-            @ApiImplicitParam(value = "经营活动指数结束", name = "conditions.indexScoreTo", dataType = "Integer", paramType = "query", required = false) })
+    @ApiImplicitParams({ 
+        @ApiImplicitParam(value = "提示类型（1.企业年报提示,2.失联企业提示,3.未年报企业提示,4.未公示企业提示,5.虚假信息企业提示）", name = "type", dataType = "Integer", paramType = "query", required = true),
+        @ApiImplicitParam(value = "提示方式(1.邮件,2.短信,3.语音)", name = "method", dataType = "Integer", paramType = "query", required = true),
+        @ApiImplicitParam(value = "企业名称", name = "conditions.companyName", dataType = "Integer", paramType = "query", required = false),
+        @ApiImplicitParam(value = "区域", name = "conditions.district", dataType = "Integer", paramType = "query", required = true),
+        @ApiImplicitParam(value = "一级行业", name = "conditions.primaryIndustry", dataType = "Integer", paramType = "query", required = false),
+        @ApiImplicitParam(value = "经营活动指数开始", name = "conditions.indexScoreFrom", dataType = "Integer", paramType = "query", required = false),
+        @ApiImplicitParam(value = "经营活动指数结束", name = "conditions.indexScoreTo", dataType = "Integer", paramType = "query", required = false) 
+    })
     @RequestMapping(value = "/task/add.do", method = RequestMethod.GET)
     public RestResult addTask(MsgTaskCreateVO param) {
         MannualRemindConditionParam conditions = param.getConditions();
@@ -133,7 +135,8 @@ public class CompanyRemindController extends AbstractController {
         MannualRemindCondition cond = BeanMapperUtil.map(conditions, MannualRemindCondition.class);
         String condStr = ObjectMapperUtil.write(cond);
         info.setConditions(condStr);
-        info.setDistrict(String.valueOf(UserContext.getQuery().getAddr()));
+        info.setDistrict(conditions.getDistrict());
+        info.setOperator(String.valueOf(UserContext.getQuery().getAddr()));
         msgTaskService.addTask(info);
 
         return RestResult.ok(null);
@@ -144,15 +147,21 @@ public class CompanyRemindController extends AbstractController {
      * @return               统一JSON数据
      */
     @ApiOperation(value = "根据企业nbxh一键提示", httpMethod = "GET")
-    @ApiImplicitParams({ @ApiImplicitParam(value = "提示类型（1.企业年报提示,2.失联企业提示,3.未年报企业提示,4.未公示企业提示,5.虚假信息企业提示）", name = "type", dataType = "Integer", paramType = "query", required = true),
-            @ApiImplicitParam(value = "提示方式(1.邮件,2.短信,3.语音)", name = "method", dataType = "Integer", paramType = "query", required = true),
-            @ApiImplicitParam(value = "企业nbxh（多选）", name = "nbxhs", dataType = "Integer", paramType = "query", required = true) })
+    @ApiImplicitParams({ 
+        @ApiImplicitParam(value = "提示类型（1.企业年报提示,2.失联企业提示,3.未年报企业提示,4.未公示企业提示,5.虚假信息企业提示）", name = "type", dataType = "Integer", paramType = "query", required = true),
+        @ApiImplicitParam(value = "提示方式(1.邮件,2.短信,3.语音)", name = "method", dataType = "Integer", paramType = "query", required = true),
+        @ApiImplicitParam(value = "企业nbxh（多选）", name = "nbxhs", dataType = "Integer", paramType = "query", required = true),
+        @ApiImplicitParam(value = "区域", name = "conditions.district", dataType = "Integer", paramType = "query", required = true)
+    })
     @RequestMapping(value = "/task/company/add.do", method = RequestMethod.GET)
     public RestResult addTask(MsgTaskCreateVO param, String[] nbxhs) {
+        
         // 验证提示类型、提示方式、企业nbxh是否为null
         ValidateUtil.checkAllNull(CommonErrorCode.PARAM_NULL, param.getType(), param.getMethod(), nbxhs);
         MsgTaskInfo info = BeanMapperUtil.map(param, MsgTaskInfo.class);
-        info.setDistrict(String.valueOf(UserContext.getQuery().getAddr()));
+        String district = param.getConditions().getDistrict();
+        info.setDistrict(district);
+        info.setOperator(String.valueOf(UserContext.getQuery().getAddr()));
         
         msgTaskService.addTaskWithNbxhs(info, Arrays.asList(nbxhs));
 

@@ -18,6 +18,7 @@ import com.bbd.service.reddata.remind.param.MannualRemindCondition;
 import com.bbd.service.reddata.remind.param.MsgTaskQueryVO;
 import com.bbd.util.StringUtils;
 import com.bbd.utils.PageListHelper;
+import com.bbd.utils.UserContext;
 import com.exception.ApplicationException;
 import com.exception.CommonErrorCode;
 import com.google.common.base.Preconditions;
@@ -305,7 +306,9 @@ public class MsgTaskServiceImpl implements IMsgTaskService {
         info.setType(s.getTaskType());
         info.setOperationType(MessageTaskConstants.AUTO);
         info.setSendTime(s.getRunDate());
-        info.setDistrict(s.getOperator());
+        //info.setDistrict(s.getOperator());
+        info.setDistrict(s.getDistrict());
+        info.setOperator(s.getOperator());
         info.setSendYear(year);
         MannualRemindCondition condition = new MannualRemindCondition();
         condition.setDistrict(s.getDistrict());
@@ -362,9 +365,10 @@ public class MsgTaskServiceImpl implements IMsgTaskService {
     public PageList<MsgTaskQueryVO> getLastRemindTask(String district, Integer type, int page) {
         DateTime dateTime = new DateTime();
         int sendYear = dateTime.getYear();
+        String operator = String.valueOf(UserContext.getQuery().getAddr());
 
         MsgTaskInfoExample exam = new MsgTaskInfoExample();
-        exam.createCriteria().andDistrictEqualTo(district).andTypeEqualTo(type).andSendYearEqualTo(sendYear);
+        exam.createCriteria().andDistrictEqualTo(district).andOperatorEqualTo(operator).andTypeEqualTo(type).andSendYearEqualTo(sendYear);
         exam.setOrderByClause("send_time DESC");
         PageBounds pb = new PageBounds(page, 1);
 
