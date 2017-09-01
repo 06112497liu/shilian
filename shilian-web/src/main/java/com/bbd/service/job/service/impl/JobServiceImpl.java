@@ -119,7 +119,7 @@ public class JobServiceImpl implements IJobService {
     @ScheduleTask(name = "CompanyRemindSendMonthlyCountJob", point = ScheduleTask.TimePoint.MONTH, unique = true)
     public void executeCompanyRemindSendMonthlyCountJob() {
         DateTime dateTime = new DateTime();
-        dateTime.plusMonths(-1);
+        dateTime = dateTime.plusMonths(-1);
         int year = dateTime.getYear();
         int month = dateTime.getMonthOfYear();
         companyRemindStatisticService.insertMonthlyRemindCount(year, month);

@@ -30,7 +30,7 @@ public class CompanyRemindSendDailyCountJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        logger.debug("CompanyRemindSendDailyCountJob excute");
+        logger.info("CompanyRemindSendDailyCountJob excute");
         jobService.executeCompanyRemindSendDailyCountJob();
     }
 }
