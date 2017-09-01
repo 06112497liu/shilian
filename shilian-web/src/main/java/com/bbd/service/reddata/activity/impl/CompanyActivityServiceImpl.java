@@ -55,6 +55,12 @@ public class CompanyActivityServiceImpl implements ICompanyActivityService {
         companyActivityDao.updateActivityExponentByAnnual(year, month);
         companyActivityDao.updateCompanyActivityType(year, month);
 
+        DateTime dateTime = new DateTime();
+        dateTime = dateTime.plusMonths(-1);
+        if (year == dateTime.getYear() && month == dateTime.getMonthOfYear()) {
+            companyService.syncBusinessRecord(year, month);
+        }
+
         doUpdateCompanyBusinessInfo(year, month);
     }
 
