@@ -79,7 +79,7 @@ public class MsgTaskQueryServiceImpl implements IMsgTaskQueryService {
         criteria.andTypeEqualTo(query.getTaskType());
         criteria.andSendYearEqualTo(sendYear);
         String areaCode = String.valueOf(userQuery.getAddr());
-        criteria.andDistrictEqualTo(areaCode);
+        criteria.andOperatorEqualTo(areaCode);
         if (query.getOperationType() != null)
             criteria.andOperationTypeEqualTo(query.getOperationType());
         if (query.getMethod() != null)
