@@ -458,7 +458,7 @@ public class CompanyServiceImpl implements ICompanyService {
         // 处理结果
         List<AbnormalRemindCompanyVO> resultList = BeanMapperUtil.mapList(dbList, AbnormalRemindCompanyVO.class);
 
-        buildAbnormalEmsAndPhones(dbList, resultList);
+        //buildAbnormalEmsAndPhones(dbList, resultList);
         buildDescription(resultList);
         buildRemindState(resultList);
         buildLastAbnormalInfo(resultList, abnormalState);

@@ -152,7 +152,7 @@ public class AddressServiceImpl implements IAddressService {
         if (StringUtils.isBlank(addr)) {
             return ll;
         }
-        if (!addr.startsWith("贵州") || !addr.startsWith("贵阳")) {
+        if (!addr.startsWith("贵州") && !addr.startsWith("贵阳")) {
             addr = "贵州省贵阳市" + addr;
         }
         ll = MapUtil.getBaiduLatLng(addr);
