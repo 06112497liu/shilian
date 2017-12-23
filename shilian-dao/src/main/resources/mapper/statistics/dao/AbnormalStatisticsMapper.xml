@@ -25,7 +25,7 @@
             and district = #{district}
         </if>
         and district != '52019999'
-        and name_type != '8'
+        and name_type != '11'
     </select>
 
     <select id="queryAbnormalCompanyDistribute"
@@ -35,7 +35,7 @@
         WHERE 
         (abnormal_state div #{abnormalState}) mod 2 = 1
         AND district != '52019999'
-        AND name_type != '8'
+        AND name_type != '11'
         GROUP BY district
         ORDER BY COUNT(1) DESC
     </select>
@@ -50,7 +50,7 @@
             AND district = #{district}
         </if>
         AND district != '52019999'
-        AND name_type != '8'
+        AND name_type != '11'
         GROUP BY primary_industry_initial
         ORDER BY COUNT(1) DESC
     </select>
@@ -64,7 +64,7 @@
             AND district = #{district}
         </if>
         AND district != '52019999'        
-        AND name_type != '8'
+        AND name_type != '11'
         GROUP BY company_property
         ORDER BY COUNT(1) DESC
     </select>
@@ -81,7 +81,7 @@
             and (c.abnormal_state div #{abnormalState}) mod 2 = 1
         </if>
         AND c.district != '52019999'
-        AND c.name_type != '8'
+        AND c.name_type != '11'
     </select>
 
     <select id="queryAbnormalMonthRemoveCount" resultType="int">
@@ -94,7 +94,7 @@
             and (c.abnormal_state div #{abnormalState}) mod 2 = 1
         </if>
         AND c.district != '52019999'
-        AND c.name_type != '8'
+        AND c.name_type != '11'
     </select>
     
     <select id="queryAbnormalMonthAddCount" resultType="int">
@@ -108,7 +108,7 @@
             and (c.abnormal_state div #{abnormalState}) mod 2 = 1
         </if>
         AND c.district != '52019999'
-        AND c.name_type != '8'       
+        AND c.name_type != '11'
     </select>
 </mapper>
 

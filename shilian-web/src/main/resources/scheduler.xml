@@ -259,7 +259,7 @@
     <bean id="companyESSyncJobTrigger"
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="companyESSyncJobDetail"/>
-        <property name="cronExpression" value="0 0/10 5-22 * * ?"/>
+        <property name="cronExpression" value="0 0/30 5-22 * * ?"/>
         <property name="startDelay" value="60000"></property>
         <property name="misfireInstruction" value="2"></property>
         <property name="timeZone" ref="timeZone"/>
@@ -313,9 +313,9 @@
         </property>
         <property name="triggers">
             <list>
-                <!-- 通过任务生成消息 -->
+<!--                &lt;!&ndash; 通过任务生成消息 &ndash;&gt;
                 <ref bean="messageDetailGenerateJobTrigger"/>
-                <!-- 消息发送 -->
+                &lt;!&ndash; 消息发送 &ndash;&gt;
                 <ref bean="annualRemindMannualEmailSendJobTrigger"/>
                 <ref bean="lostRemindMannualEmailSendJobTrigger"/>
                 <ref bean="unannualRemindMannualEmailSendJobTrigger"/>
@@ -326,19 +326,19 @@
                 <ref bean="unannualRemindMannualSmsSendJobTrigger"/>
                 <ref bean="unpublicityRemindMannualSmsSendJobTrigger"/>
                 <ref bean="fakeInfoRemindMannualSmsSendJobTrigger"/>
-                <!-- 根据自动提示配置生成任务 -->
+                &lt;!&ndash; 根据自动提示配置生成任务 &ndash;&gt;
                 <ref bean="autoRemindGenerateJobTrigger"/>
-                <!-- 自动提示任务所生成消息发送 -->
-                <!--<ref bean="autoRemindMessageSendJobTrigger"/>-->
-                <!-- 消息发送统计 -->
+                &lt;!&ndash; 自动提示任务所生成消息发送 &ndash;&gt;
+                &lt;!&ndash;<ref bean="autoRemindMessageSendJobTrigger"/>&ndash;&gt;
+                &lt;!&ndash; 消息发送统计 &ndash;&gt;
                 <ref bean="companyRemindSendDailyCountJobTrigger"/>
                 <ref bean="companyRemindSendMonthlyCountJobTrigger"/>
-                <!-- 经营活动算分 -->
-                <ref bean="companyActivityCalculateJobTrigger"/>
+                &lt;!&ndash; 经营活动算分 &ndash;&gt;
+                <ref bean="companyActivityCalculateJobTrigger"/>-->
                 <!-- es 数据同步 -->
                 <ref bean="companyESSyncJobTrigger"/>
                 <!-- 同步企业经营活动信息到企业表 -->
-                <ref bean="companyBusinessRecordSyncJobTrigger"/>
+                <!--<ref bean="companyBusinessRecordSyncJobTrigger"/>-->
             </list>
         </property>
     </bean>

@@ -48,7 +48,7 @@
         <if test="district != null and district != '5201'">
             and district = #{district}
         </if>
-        	and name_type != '8'
+        	and name_type != '11'
     </select>
     
     <!-- 企业总数（包含 吊销 和 52019999 的企业） -->

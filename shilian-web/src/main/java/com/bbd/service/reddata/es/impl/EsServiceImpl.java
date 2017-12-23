@@ -55,8 +55,8 @@ public class EsServiceImpl implements IEsService {
     public void syncFullCompanyToEs() {
         Map<String, CompanyTypeMappingInfo> typeMap = getAllCompanyTypeMappingInfos();
 
-        EsUtil.deleteAll(EsUtil.INDEX);
 
+        EsUtil.deleteAll(EsUtil.INDEX);
         // 同步计数
         int count = 0;
 

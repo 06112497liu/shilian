@@ -85,8 +85,10 @@ public class LostCompanyStatisticsController extends AbstractController {
      * 生成word随机字下载符串.
      */
     @ApiOperation(value = "生成word随机下载字符串", httpMethod = "POST")
-    @ApiImplicitParams({ @ApiImplicitParam(value = "区域编码", name = "areaCode", required = true, defaultValue = "5201", paramType = "query"),
-            @ApiImplicitParam(value = "热力图", name = "hotImg", required = true, paramType = "query"), @ApiImplicitParam(value = "环形图", name = "companyTypeImg", required = true, paramType = "query"),
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "区域编码", name = "areaCode", required = true, defaultValue = "5201", paramType = "query"),
+            @ApiImplicitParam(value = "热力图", name = "hotImg", required = true, paramType = "query"),
+            @ApiImplicitParam(value = "环形图", name = "companyTypeImg", required = true, paramType = "query"),
             @ApiImplicitParam(value = "柱状图", name = "industryImg", required = true, paramType = "query") })
     @RequestMapping(value = "/getReportUrl.do", method = RequestMethod.POST)
     public RestResult exportStatisticsWord(Integer areaCode, String hotImg, String companyTypeImg, String industryImg) {

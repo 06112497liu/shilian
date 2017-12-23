@@ -57,7 +57,7 @@
         from bbd_enterprise_info
         where (abnormal_state div #{abnormalState}) mod 2 = 1
         and district != '52019999'
-        and name_type != '8'
+        and name_type != '11'
         <if test="companyName != null">
             and company_name like #{companyName}
         </if>
@@ -106,7 +106,7 @@
         and a.type = 4
         and a.delete_flag = 0
         and c.district != '52019999'
-        and c.name_type != '8'
+        and c.name_type != '11'
         <if test="companyProperty != null">
             and c.company_property = #{companyProperty}
         </if>
@@ -199,7 +199,7 @@
        	WHERE	
         	district != '52019999'
         AND 
-        	name_type != '8'
+        	name_type != '11'
         GROUP 
         	BY district
     </select>

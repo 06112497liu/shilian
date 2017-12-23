@@ -8,7 +8,7 @@
         insert into bbd_company_remind_queue(nbxh, task_id, type, method, operate_type, plan_date, district, gmt_create)
         select nbxh, #{taskId}, #{type}, #{method}, #{operateType}, #{planDate}, #{district}, now()
         from bbd_enterprise_info
-        where annual_state = 2 and district != '52019999' and name_type != '8'
+        where annual_state = 2 and district != '52019999' and name_type != '11'
         <if test="companyName != null">
             companyName like #{companyName}
         </if>
@@ -27,7 +27,7 @@
         insert into bbd_company_remind_queue(nbxh, task_id, type, method, operate_type, plan_date, district, gmt_create)
         select nbxh, #{taskId}, #{type}, #{method}, #{operateType}, #{planDate}, #{district}, now()
         from bbd_enterprise_info
-        where (abnormal_state div #{abnormalState}) mod 2 = 1 AND district != '52019999' AND name_type != '8'
+        where (abnormal_state div #{abnormalState}) mod 2 = 1 AND district != '52019999' AND name_type != '11'
         <if test="companyName != null">
             AND companyName like #{companyName}
         </if>

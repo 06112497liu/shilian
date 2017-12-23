@@ -35,7 +35,7 @@
         #{month},
         NOW() FROM bbd_company_info bc
         WHERE bc.company_property IN (1, 2, 3)
-        AND bc.name_type IN ('2', '8')
+        AND bc.name_type IN ('06', '11')
         AND LENGTH(bc.zsxzqh) IN (6, 8)
         AND (bc.gmt_cancel is null or bc.gmt_cancel &gt;= STR_TO_DATE(CONCAT(#{year}, '-', #{month}, '-', 1),
         '%Y-%m-%d'))
@@ -58,7 +58,7 @@
     <update id="updateSuspendNotCancelState">
         UPDATE bbd_business_month_statistics s, `bbd_company_info` c
         SET s.`company_state` = s.`company_state` + 2
-        WHERE s.`activity_year`=#{year} AND s.`activity_month`=#{month} AND s.nbxh = c.nbxh AND c.`name_type`='8'
+        WHERE s.`activity_year`=#{year} AND s.`activity_month`=#{month} AND s.nbxh = c.nbxh AND c.`name_type`='11'
     </update>
 
     <update id="updateSeriousIllegal">

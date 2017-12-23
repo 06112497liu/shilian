@@ -35,7 +35,7 @@
             and district = #{district}
         </if>
         AND district != '52019999'
-        AND name_type != '8'        
+        AND name_type != '11'
     </select>
 
     <!-- 当前应年报企业数量 -->
@@ -49,7 +49,7 @@
             AND district = #{district}
         </if>
         AND district != '52019999'
-        AND name_type != '8'
+        AND name_type != '11'
     </select>
 
     <select id="selectUnannualedCount" resultType="int">
@@ -62,7 +62,7 @@
             AND district = #{district}
         </if>
         AND district != '52019999'
-        AND name_type != '8'
+        AND name_type != '11'
     </select>
 
     <select id="selectAnnualedCurrentMonthCount" resultType="int">
@@ -73,7 +73,7 @@
         </if>
         AND YEAR(a.gmt_annual)=#{year} AND MONTH(a.gmt_annual) = #{month}
         AND c.district != '52019999' 
-        AND c.name_type != '8'
+        AND c.name_type != '11'
     </select>
 
     <select id="selectAnnualedCompanyDistribute"
@@ -82,7 +82,7 @@
         FROM bbd_enterprise_info
         WHERE annual_state = 1
         AND district != '52019999'
-        AND name_type != '8'
+        AND name_type != '11'
         GROUP BY district
     </select>
 
@@ -96,7 +96,7 @@
             and district = #{district}
         </if>
         AND district != '52019999'
-        AND name_type != '8'
+        AND name_type != '11'
         GROUP BY primary_industry_initial
         ORDER BY COUNT(1) DESC
     </select>
@@ -110,7 +110,7 @@
             AND district = #{district}
         </if>
         AND district != '52019999'
-        AND name_type != '8'        
+        AND name_type != '11'
         GROUP BY company_property
         ORDER BY COUNT(1) DESC
     </select>
