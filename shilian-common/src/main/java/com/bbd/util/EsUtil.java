@@ -20,6 +20,8 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.ListenableActionFuture;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
+import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
+import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -335,8 +337,15 @@ public class EsUtil {
     }
 
     public static void deleteAll(String type) {
-        BulkIndexByScrollResponse response = DeleteByQueryAction.INSTANCE.newRequestBuilder(client).filter(QueryBuilders.matchAllQuery()).source(type).get();
-        long deleted = response.getDeleted();
+        // step-1 : 判断索引是否存在
+        IndicesExistsRequest inExistsRequest = new IndicesExistsRequest(type);
+        IndicesExistsResponse inExistsResponse = client.admin().indices().exists(inExistsRequest).actionGet();
+        // step-2 ： 存在就删除该索引下的数据
+        long deleted = 0L;
+        if (inExistsResponse.isExists()) {
+            BulkIndexByScrollResponse response = DeleteByQueryAction.INSTANCE.newRequestBuilder(client).filter(QueryBuilders.matchAllQuery()).source(type).get();
+            deleted = response.getDeleted();
+        }
         logger.info("All datas under {} is deleted : {}", type, deleted);
     }
 
