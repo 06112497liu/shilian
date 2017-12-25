@@ -150,7 +150,7 @@ public class LostCompanyStatisticsServiceImpl implements ILostCompanyStatisticsS
             }
             paramsUtil.put("industryList", industryList);
 
-            XWPFDocument word = WordUtil.generateWord(paramsUtil.get(), "report.doc");
+            XWPFDocument word = WordUtil.generateWord(paramsUtil.get(), "report.docx");
             word.write(out);
             RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
             connection.setEx(("doc-" + uid).getBytes(), 2000, out.toByteArray());
@@ -170,7 +170,7 @@ public class LostCompanyStatisticsServiceImpl implements ILostCompanyStatisticsS
     public void downLoadReport(HttpServletResponse response, String uid) {
         try {
             String fileName = DateUtil.formatDateByPatten(new Date(), "yyyyMMddHHmmss");
-            response.setHeader("Content-disposition", "attachment;filename=\"" + fileName + ".doc" + "\"");
+            response.setHeader("Content-disposition", "attachment;filename=\"" + fileName + ".docx" + "\"");
             response.setContentType("application/msword");
             RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
             byte[] keyBytes = ("doc-" + uid).getBytes();
