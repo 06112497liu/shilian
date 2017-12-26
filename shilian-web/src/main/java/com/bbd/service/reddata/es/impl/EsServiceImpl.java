@@ -12,7 +12,9 @@ import com.bbd.enums.IndustryEnum;
 import com.bbd.service.reddata.es.IEsService;
 import com.bbd.util.EsUtil;
 import com.bbd.util.StringUtils;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mybatis.domain.PageBounds;
 import org.joda.time.DateTime;
@@ -21,10 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -53,7 +52,7 @@ public class EsServiceImpl implements IEsService {
 
     @Override
     public void syncFullCompanyToEs() {
-        Map<String, CompanyTypeMappingInfo> typeMap = getAllCompanyTypeMappingInfos();
+        Map<Integer, String> typeMap = getAllCompanyTypeMappingInfos();
 
 
         EsUtil.deleteAll(EsUtil.INDEX);
@@ -84,14 +83,14 @@ public class EsServiceImpl implements IEsService {
 
     @Override
     public void syncIncreaseCompanyToEs() {
-        Map<String, CompanyTypeMappingInfo> typeMap = getAllCompanyTypeMappingInfos();
+        Map<Integer, String> typeMap = getAllCompanyTypeMappingInfos();
 
         while (true) {
             Integer id = EsUtil.getLastId(EsUtil.COMPANY).intValue();
 
             EnterpriseInfoExample exam = new EnterpriseInfoExample();
             exam.createCriteria().andIdGreaterThan(id);
-            PageBounds pb = new PageBounds(1, 1000, false);
+            PageBounds pb = new PageBounds(1, 500, false);
 
             List<EnterpriseInfo> ds = enterpriseInfoDao.selectByExampleWithPageBounds(exam, pb);
             if (ds.size() == 0) {
@@ -108,14 +107,13 @@ public class EsServiceImpl implements IEsService {
         }
     }
 
-    private Map<String, CompanyTypeMappingInfo> getAllCompanyTypeMappingInfos() {
-        CompanyTypeMappingInfoExample exam = new CompanyTypeMappingInfoExample();
-        List<CompanyTypeMappingInfo> ds = companyTypeMappingInfoDao.selectByExample(exam);
-
-        return ds.stream().collect(Collectors.toMap(CompanyTypeMappingInfo::getCompanyCode, (p) -> p));
+    private Map<Integer, String> getAllCompanyTypeMappingInfos() {
+        Map<Integer, String> rs = Maps.newHashMap();
+        rs.put(1, "民营企业"); rs.put(2, "国有企业"); rs.put(3, "外资企业"); rs.put(4, "农专社"); rs.put(5, "个体户");
+        return rs;
     }
 
-    private CompanyEsVO build(EnterpriseInfo info, Map<String, CompanyTypeMappingInfo> typeMap) {
+    private CompanyEsVO build(EnterpriseInfo info, Map<Integer, String> typeMap) {
         CompanyEsVO vo = CompanyEsVO.empty();
         BeanUtils.copyProperties(info, vo);
         vo.setId(info.getId().longValue());
@@ -129,18 +127,12 @@ public class EsServiceImpl implements IEsService {
         }
 
         // 行业
-        String pi = vo.getPrimaryIndustry();
-        pi = getPrimaryIndustry(pi);
-        String piDesc = getPrimaryIndustryDesc(pi);
-        vo.setPrimaryIndustry(pi);
-        vo.setIndustryDesc(piDesc);
+        vo.setPrimaryIndustry(info.getPrimaryIndustryInitial());
 
         // 企业性质
-        CompanyTypeMappingInfo ct = typeMap.get(vo.getCompanyType());
-        if (ct != null) {
-            vo.setCompanyPropoerty(ct.getCompanyType());
-            vo.setCompanyPropoertyDesc(ct.getDescription());
-        }
+        Integer property = info.getCompanyProperty();
+        vo.setCompanyPropoerty(property);
+        vo.setCompanyPropoertyDesc(typeMap.get(property));
 
         double lng = info.getLongitude() == null ? -1 : info.getLongitude();
         double lat = info.getLatitude() == null ? -1 : info.getLatitude();
@@ -172,12 +164,12 @@ public class EsServiceImpl implements IEsService {
         vo.setBusinessStatus(businessStatus);
 
         // 经营活动
-        List<Integer> as = getActivities(nbxh);
+        String records = info.getBusinessRecords();
+        List<Integer> as = getActivities(records);
         vo.setActivity(as);
 
         // 经营活动指数
-        Double exponent = getExponent(nbxh);
-        vo.setScore(exponent);
+        vo.setScore(info.getIndexScore());
 
         return vo;
     }
@@ -307,28 +299,14 @@ public class EsServiceImpl implements IEsService {
         return result;
     }
 
-    private List<Integer> getActivities(String nbxh) {
-        List<Integer> result = Lists.newArrayList();
-
-        DateTime time = new DateTime();
-        time = time.plusMonths(-1);
-        int year = time.getYear();
-        int month = time.getMonthOfYear();
-
-        BusinessRecordsInfoExample exam = new BusinessRecordsInfoExample();
-        exam.createCriteria().andNbxhEqualTo(nbxh).andActivityYearEqualTo(year).andActivityMonthEqualTo(month);
-
-        List<BusinessRecordsInfo> ds = businessRecordsInfoDao.selectByExample(exam);
-
-        if (ds.size() == 0) {
-            return result;
+    private List<Integer> getActivities(String records) {
+        List<Integer> result = Lists.newLinkedList();
+        if (StringUtils.isEmpty(records)) return result;
+        Splitter splitter = Splitter.on(",").omitEmptyStrings().trimResults();
+        Iterable<String> it = splitter.splitToList(records);
+        for (String s : it) {
+            result.add(Integer.valueOf(s));
         }
-
-        Set<Integer> rs = Sets.newHashSet();
-        for (BusinessRecordsInfo d : ds) {
-            rs.add(d.getContentType());
-        }
-        result.addAll(rs);
         return result;
     }
 
