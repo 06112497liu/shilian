@@ -70,7 +70,7 @@ public class CompanyActivityServiceTest extends BaseBizTest {
     //@Ignore
     public void testGenerateSpecificMonthStatistic() {
         int year = 2017;
-        int month = 8;
+        int month = 11;
         System.out.println("year : " + year + ", month : " + month);
         companyActivityService.generateMonthStatistic(year, month);
         System.out.println("结束");
