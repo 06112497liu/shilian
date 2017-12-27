@@ -11,13 +11,13 @@
         <constructor-arg value="GMT+08:00"/>
     </bean>
 
-    <!--<bean id="quartzDataSource"-->
-    <!--class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-    <!--<property name="driverClassName" value="${jdbc.driverClassName}"/>-->
-    <!--<property name="url" value="${jdbc.url}"/>-->
-    <!--<property name="username" value="${jdbc.username}"/>-->
-    <!--<property name="password" value="${jdbc.password}"/>-->
-    <!--</bean>-->
+    <bean id="quartzDataSource"
+    class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${jdbc.driverClassName}"/>
+    <property name="url" value="${jdbc.url}"/>
+    <property name="username" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
+    </bean>
 
     <bean id="annualRemindMannualEmailSendJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="com.bbd.service.job.remind.AnnualRemindManualEmailSendJob"></property>
@@ -193,18 +193,18 @@
         <property name="timeZone" ref="timeZone"/>
     </bean>
 
-    <!--<bean id="autoRemindMessageSendJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">-->
-    <!--<property name="jobClass" value="com.bbd.service.job.remind.AutoRemindMessageSendJob"></property>-->
-    <!--<property name="durability" value="true"></property>-->
-    <!--</bean>-->
+    <bean id="autoRemindMessageSendJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+    <property name="jobClass" value="com.bbd.service.job.remind.AutoRemindMessageSendJob"></property>
+    <property name="durability" value="true"></property>
+    </bean>
 
-    <!--<bean id="autoRemindMessageSendJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
-    <!--<property name="jobDetail" ref="autoRemindMessageSendJobDetail"/>-->
-    <!--<property name="startDelay" value="10000"/>-->
-    <!--<property name="cronExpression" value="0 0/5 5-23 * * ?"/>-->
-    <!--<property name="misfireInstruction" value="2"></property>-->
-    <!--<property name="timeZone" ref="timeZone"/>-->
-    <!--</bean>-->
+    <bean id="autoRemindMessageSendJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <property name="jobDetail" ref="autoRemindMessageSendJobDetail"/>
+    <property name="startDelay" value="10000"/>
+    <property name="cronExpression" value="0 0/5 5-23 * * ?"/>
+    <property name="misfireInstruction" value="2"></property>
+    <property name="timeZone" ref="timeZone"/>
+    </bean>
 
     <bean id="companyRemindSendDailyCountJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="com.bbd.service.job.remind.CompanyRemindSendDailyCountJob"></property>
@@ -313,9 +313,9 @@
         </property>
         <property name="triggers">
             <list>
-<!--                &lt;!&ndash; 通过任务生成消息 &ndash;&gt;
+                <!-- 通过任务生成消息 -->
                 <ref bean="messageDetailGenerateJobTrigger"/>
-                &lt;!&ndash; 消息发送 &ndash;&gt;
+                <!-- 消息发送 -->
                 <ref bean="annualRemindMannualEmailSendJobTrigger"/>
                 <ref bean="lostRemindMannualEmailSendJobTrigger"/>
                 <ref bean="unannualRemindMannualEmailSendJobTrigger"/>
@@ -326,19 +326,19 @@
                 <ref bean="unannualRemindMannualSmsSendJobTrigger"/>
                 <ref bean="unpublicityRemindMannualSmsSendJobTrigger"/>
                 <ref bean="fakeInfoRemindMannualSmsSendJobTrigger"/>
-                &lt;!&ndash; 根据自动提示配置生成任务 &ndash;&gt;
+                <!-- 根据自动提示配置生成任务 -->
                 <ref bean="autoRemindGenerateJobTrigger"/>
-                &lt;!&ndash; 自动提示任务所生成消息发送 &ndash;&gt;
-                &lt;!&ndash;<ref bean="autoRemindMessageSendJobTrigger"/>&ndash;&gt;
-                &lt;!&ndash; 消息发送统计 &ndash;&gt;
+                <!-- 自动提示任务所生成消息发送 -->
+                <ref bean="autoRemindMessageSendJobTrigger"/>
+                <!-- 消息发送统计 -->
                 <ref bean="companyRemindSendDailyCountJobTrigger"/>
                 <ref bean="companyRemindSendMonthlyCountJobTrigger"/>
-                &lt;!&ndash; 经营活动算分 &ndash;&gt;
-                <ref bean="companyActivityCalculateJobTrigger"/>-->
+                <!-- 经营活动算分 -->
+                <ref bean="companyActivityCalculateJobTrigger"/>
                 <!-- es 数据同步 -->
                 <ref bean="companyESSyncJobTrigger"/>
                 <!-- 同步企业经营活动信息到企业表 -->
-                <!--<ref bean="companyBusinessRecordSyncJobTrigger"/>-->
+                <ref bean="companyBusinessRecordSyncJobTrigger"/>
             </list>
         </property>
     </bean>
