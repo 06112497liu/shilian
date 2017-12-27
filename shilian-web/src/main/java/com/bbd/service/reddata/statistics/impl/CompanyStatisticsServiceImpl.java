@@ -160,7 +160,6 @@ public class CompanyStatisticsServiceImpl implements ICompanyStatisticsService {
 
     /**
      * 补全没有数据的区域
-     *  @param type 1-关于年报的（如果为1，表示移除其他的数据）
      * @param list
      */
     private void fillDestrictData(List<CompanyAddrStaticInfo> list) {

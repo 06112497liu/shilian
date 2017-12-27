@@ -122,7 +122,7 @@ public class EsServiceImpl implements IEsService {
 
         // 登记机关
         String ra = info.getRegisterAuthority();
-        if (StringUtils.isBlank(ra) || ra.length() <= 6) {
+        if (StringUtils.isBlank(ra)) {
             vo.setRegisterAuthority("未知");
         }
 
