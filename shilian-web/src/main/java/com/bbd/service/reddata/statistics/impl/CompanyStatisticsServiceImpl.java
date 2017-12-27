@@ -83,7 +83,7 @@ public class CompanyStatisticsServiceImpl implements ICompanyStatisticsService {
     }
 
     /**
-     * 获取贵阳市的企业总量（去除 吊销 和 52019999 的企业）
+     * 获取贵阳市的企业总量（enterprise_info表中去除name_type = 11:吊销）
      */
     @Override
     @Cacheable(value = CacheConstants.STATISTIC_COMPANY, keyGenerator = "simpleKeyGenerator")
@@ -92,7 +92,7 @@ public class CompanyStatisticsServiceImpl implements ICompanyStatisticsService {
     }
     
     /**
-     * 获取企业总数（包含 吊销 和 52019999 的企业）
+     * 获取企业总数（不含吊销）
      */
     @Override
     @Cacheable(value = CacheConstants.STATISTIC_COMPANY, keyGenerator = "simpleKeyGenerator")
@@ -165,7 +165,7 @@ public class CompanyStatisticsServiceImpl implements ICompanyStatisticsService {
     private void fillDestrictData(List<CompanyAddrStaticInfo> list) {
         Map<String, String> dsMap = addressService.getDistrictCodeMap(Constants.GUIYANG_CODE);
         Set<String> districts = dsMap.keySet();
-        if(!districts.isEmpty()) districts.remove("52019999");
+        // if(!districts.isEmpty()) districts.remove("52019999");
         Set<String> listDis = Sets.newHashSet();
 
         for (int i = 0; i < list.size(); i++) {

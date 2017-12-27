@@ -35,7 +35,7 @@
         #{month},
         NOW() FROM bbd_company_info bc
         WHERE bc.company_property IN (1, 2, 3)
-        AND bc.name_type IN ('06', '11')
+        AND bc.name_type IN ('06', '11', '98')
         AND LENGTH(bc.zsxzqh) IN (6, 8)
         AND (bc.gmt_cancel is null or bc.gmt_cancel &gt;= STR_TO_DATE(CONCAT(#{year}, '-', #{month}, '-', 1),
         '%Y-%m-%d'))

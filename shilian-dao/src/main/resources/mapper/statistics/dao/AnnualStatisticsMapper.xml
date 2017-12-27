@@ -35,7 +35,7 @@
             and district = #{district}
         </if>
         AND district != '52019999'
-        AND name_type != '11'
+        AND name_type = '06'
     </select>
 
     <!-- 当前应年报企业数量 -->
@@ -49,9 +49,10 @@
             AND district = #{district}
         </if>
         AND district != '52019999'
-        AND name_type != '11'
+        AND name_type = '06'
     </select>
 
+    <!-- 未年报企业数量（年报页面） -->
     <select id="selectUnannualedCount" resultType="int">
         SELECT
         COUNT(nbxh)
@@ -62,7 +63,7 @@
             AND district = #{district}
         </if>
         AND district != '52019999'
-        AND name_type != '11'
+        AND name_type = '06'
     </select>
 
     <select id="selectAnnualedCurrentMonthCount" resultType="int">
@@ -73,7 +74,7 @@
         </if>
         AND YEAR(a.gmt_annual)=#{year} AND MONTH(a.gmt_annual) = #{month}
         AND c.district != '52019999' 
-        AND c.name_type != '11'
+        AND c.name_type ='06'
     </select>
 
     <select id="selectAnnualedCompanyDistribute"
@@ -82,10 +83,11 @@
         FROM bbd_enterprise_info
         WHERE annual_state = 1
         AND district != '52019999'
-        AND name_type != '11'
+        AND name_type = '06'
         GROUP BY district
     </select>
 
+    <!-- 未年报企业行业分布 （年报页面）-->
     <select id="selectUnannualIndustryDistribute"
             resultType="com.bbd.bean.statistics.NameValueInfo">
         SELECT primary_industry_initial as name, COUNT(1) as value
@@ -96,11 +98,12 @@
             and district = #{district}
         </if>
         AND district != '52019999'
-        AND name_type != '11'
+        AND name_type = '06'
         GROUP BY primary_industry_initial
         ORDER BY COUNT(1) DESC
     </select>
 
+    <!-- 未年报企业企业性质分类 （年报页面）-->
     <select id="selectUnannualPropertyDistribute"
             resultType="com.bbd.bean.statistics.NameValueInfo">
         SELECT company_property as name, COUNT(1) as value
@@ -110,7 +113,7 @@
             AND district = #{district}
         </if>
         AND district != '52019999'
-        AND name_type != '11'
+        AND name_type = '06'
         GROUP BY company_property
         ORDER BY COUNT(1) DESC
     </select>

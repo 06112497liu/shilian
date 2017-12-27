@@ -56,8 +56,7 @@
         <include refid="Base_Column_List"/>
         from bbd_enterprise_info
         where (abnormal_state div #{abnormalState}) mod 2 = 1
-        and district != '52019999'
-        and name_type != '11'
+        and name_type IN ('98', '06')
         <if test="companyName != null">
             and company_name like #{companyName}
         </if>
@@ -105,8 +104,7 @@
         c.nbxh = a.nbxh
         and a.type = 4
         and a.delete_flag = 0
-        and c.district != '52019999'
-        and c.name_type != '11'
+        and c.name_type in ('98', '06')
         <if test="companyProperty != null">
             and c.company_property = #{companyProperty}
         </if>
@@ -190,16 +188,14 @@
         where c.nbxh=b.nbxh and b.activity_year=#{year} and b.activity_month=#{month}
     </update>
 
-    <!-- 查询贵阳市各区域企业数量 -->
+    <!-- 查询贵阳市各区域企业数量 （异常页面） -->
     <select id="selectCompanyGroupByDistrict" resultType="com.bbd.bean.statistics.NameValueInfo">
         SELECT 
         	district as name, count(1) as value
         FROM 
         	bbd_enterprise_info
        	WHERE	
-        	district != '52019999'
-        AND 
-        	name_type != '11'
+        	name_type IN ('98', '06')
         GROUP 
         	BY district
     </select>
@@ -210,6 +206,8 @@
         FROM bbd_enterprise_info
         WHERE 
         annual_state != 0
+        AND district != '52019999'
+        AND name_type = '06'
         GROUP BY district
     </select>
 

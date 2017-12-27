@@ -24,7 +24,7 @@ public interface ICompanyStatisticsService {
     CompanyDataCountInfo getCompanyDataCountInfo();
 
     /**
-     * 获取企业总数（去除 吊销 和 52019999 的企业）
+     * 获取企业总数（enterprise_info表中去除name_type = 11:吊销）
      *
      * @return
      */

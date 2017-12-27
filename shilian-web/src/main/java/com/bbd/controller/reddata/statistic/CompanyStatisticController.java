@@ -64,7 +64,7 @@ public class CompanyStatisticController extends AbstractController {
         if (StringUtils.isBlank(district)) {
             district = "5201";
         }
-        // 企业总数量（包含吊销和52019999的企业）
+        // 企业总数量（enterprise_info表中去除name_type = 11:吊销）
         Integer companyCount = companyStatisticsService.getCompanyTotalCount(district);
         return RestResult.ok(companyCount);
     }
