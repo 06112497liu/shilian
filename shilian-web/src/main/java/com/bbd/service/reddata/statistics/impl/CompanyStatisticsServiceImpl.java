@@ -154,7 +154,9 @@ public class CompanyStatisticsServiceImpl implements ICompanyStatisticsService {
         // 转区域编码为中文
         addDistrictDescForCompanyAddr(result);
         // 补全数据
-        fillDestrictData(result);
+        Map<String, String> dsMap = addressService.getDistrictCodeMap(Constants.GUIYANG_CODE);
+        dsMap.remove("52019999");
+        fillDestrictData(result, dsMap);
         return result;
     }
 
@@ -162,8 +164,8 @@ public class CompanyStatisticsServiceImpl implements ICompanyStatisticsService {
      * 补全没有数据的区域
      * @param list
      */
-    private void fillDestrictData(List<CompanyAddrStaticInfo> list) {
-        Map<String, String> dsMap = addressService.getDistrictCodeMap(Constants.GUIYANG_CODE);
+    private void fillDestrictData(List<CompanyAddrStaticInfo> list, Map<String, String> dsMap) {
+
         Set<String> districts = dsMap.keySet();
         // if(!districts.isEmpty()) districts.remove("52019999");
         Set<String> listDis = Sets.newHashSet();
@@ -344,7 +346,8 @@ public class CompanyStatisticsServiceImpl implements ICompanyStatisticsService {
         Map<String, Long> disCount = companyUtil.getCompanyCoutByDistrict();
         List<CompanyAddrStaticInfo> result = transferCompanyAddr(infos, disCount);
         addDistrictDescForCompanyAddr(result);
-        fillDestrictData(result);
+        Map<String, String> dsMap = addressService.getDistrictCodeMap(Constants.GUIYANG_CODE);
+        fillDestrictData(result, dsMap);
         return result;
     }
 

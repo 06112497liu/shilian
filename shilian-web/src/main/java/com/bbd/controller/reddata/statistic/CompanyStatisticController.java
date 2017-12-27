@@ -144,15 +144,12 @@ public class CompanyStatisticController extends AbstractController {
             district = "5201";
         }
         List<CompanyAddrStaticInfo> result = companyStatisticsService.getAnnualedCompanyDistribute(district);
-        Collections.sort(result, new Comparator<CompanyAddrStaticInfo>() {
-            @Override
-            public int compare(CompanyAddrStaticInfo o1, CompanyAddrStaticInfo o2) {
-                String value1 = o1.getPercent().replace("%", "");
-                String value2 = o2.getPercent().replace("%", "");
-                Double d1 = Double.parseDouble(value1);
-                Double d2 = Double.parseDouble(value2);
-                return d2.compareTo(d1);
-            }
+        Collections.sort(result, (o1, o2) -> {
+            String value1 = o1.getPercent().replace("%", "");
+            String value2 = o2.getPercent().replace("%", "");
+            Double d1 = Double.parseDouble(value1);
+            Double d2 = Double.parseDouble(value2);
+            return d2.compareTo(d1);
         });
         return RestResult.ok(result);
     }
