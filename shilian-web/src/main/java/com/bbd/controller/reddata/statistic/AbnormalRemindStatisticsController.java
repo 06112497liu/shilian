@@ -12,6 +12,7 @@ import com.bbd.util.StringUtils;
 import com.bbd.util.ValidateUtil;
 import com.bbd.utils.PercentUtil;
 import com.bbd.utils.PermissionUtil;
+import com.bbd.utils.UserContext;
 import com.bean.RestResult;
 import com.exception.CommonErrorCode;
 import com.google.common.collect.Maps;
@@ -89,9 +90,10 @@ public class AbnormalRemindStatisticsController extends AbstractController {
     })
     @RequestMapping(value = "/total.do", method = RequestMethod.GET)
     public RestResult getTotal(Integer abnormalState, String district) {
-        ValidateUtil.checkAllNull(CommonErrorCode.PARAM_NULL, abnormalState, district);
+        ValidateUtil.checkNull(abnormalState, CommonErrorCode.PARAM_NULL);
         // 异常企业数量
-        Integer abnormalCount = companyStatisticsService.queryPartialAbnormalCount(abnormalState, district);
+        String region = String.valueOf(UserContext.getQuery().getAddr());
+        Integer abnormalCount = companyStatisticsService.queryPartialAbnormalCount(abnormalState, region);
         return RestResult.ok(abnormalCount);
     }
 

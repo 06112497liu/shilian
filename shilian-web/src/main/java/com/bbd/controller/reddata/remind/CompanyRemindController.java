@@ -82,9 +82,10 @@ public class CompanyRemindController extends AbstractController {
     @ApiImplicitParams({ @ApiImplicitParam(value = "区域编码", name = "district", dataType = "Integer", paramType = "query", required = true), })
     @RequestMapping(value = "/unannual/count.do", method = RequestMethod.GET)
     public RestResult getUnannualCount(String district) {
-        ValidateUtil.checkNull(district, CommonErrorCode.PARAM_NULL);
-        PermissionUtil.checkPermission(district);
-        Integer result = companyStatisticsService.getUnannualedCompanyCount(district);
+//        ValidateUtil.checkNull(district, CommonErrorCode.PARAM_NULL);
+//        PermissionUtil.checkPermission(district);
+        String region = String.valueOf(UserContext.getQuery().getAddr());
+        Integer result = companyStatisticsService.getUnannualedCompanyCount(region);
         return RestResult.ok(result);
     }
 
