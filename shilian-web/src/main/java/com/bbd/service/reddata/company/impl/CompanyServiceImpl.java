@@ -356,15 +356,23 @@ public class CompanyServiceImpl implements ICompanyService {
             String nb = info.getNbxh();
             String em = info.getAnnualEmails();
             String ph = info.getAnnualPhones();
+
+            List<String> bbdEms = Lists.newLinkedList();
+            List<String> bbdPhs = Lists.newLinkedList();
+
+            if (StringUtils.isEmpty(ph)) {
+                bbdPhs = bbdMessageService.getBBDSms(nb);
+            }
+            if (StringUtils.isEmpty(em)) {
+                bbdEms = bbdMessageService.getBBDEmails(nb);
+            }
+
             List<String> ems = Lists.newArrayList();
             List<String> phs = Lists.newArrayList();
             if (em != null)
                 ems.add(em);
             if (ph != null)
                 phs.add(ph);
-
-            List<String> bbdEms = bbdMessageService.getBBDEmails(nb);
-            List<String> bbdPhs = bbdMessageService.getBBDSms(nb);
 
             ems.addAll(bbdEms);
             phs.addAll(bbdPhs);
@@ -397,7 +405,6 @@ public class CompanyServiceImpl implements ICompanyService {
 
         for (CompanyInfo info : dbList) {
             String nb = info.getNbxh();
-
             String em = info.getAnnualEmails();
             String ph = info.getAnnualPhones();
 
