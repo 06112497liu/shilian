@@ -215,7 +215,7 @@ public class LostCompanyStatisticsServiceImpl implements ILostCompanyStatisticsS
         }
 
         Map<String, String> districtMap = addressService.getDistrictCodeMap(Constants.GUIYANG_CODE);
-        if(!districtMap.isEmpty()) districtMap.remove("52019999"); 
+        //if(!districtMap.isEmpty()) districtMap.remove("52019999");
         Map<String, String> industryMap = companyUtil.getPrimaryIndustryMap();
         Map<String, String> propertyMap = companyUtil.getCompanyPropertyMap();
 

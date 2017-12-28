@@ -27,7 +27,7 @@
         insert into bbd_company_remind_queue(nbxh, task_id, type, method, operate_type, plan_date, district, gmt_create)
         select nbxh, #{taskId}, #{type}, #{method}, #{operateType}, #{planDate}, #{district}, now()
         from bbd_enterprise_info
-        where (abnormal_state div #{abnormalState}) mod 2 = 1 AND name_type IN ('98', '06')
+        where (abnormal_state div #{abnormalState}) mod 2 = 1 AND name_type IN ('98', '06') AND district != '52019999'
         <if test="companyName != null">
             AND companyName like #{companyName}
         </if>
