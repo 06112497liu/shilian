@@ -320,7 +320,7 @@ public class CompanyServiceImpl implements ICompanyService {
             to = to == null ? 100d : to;
             criteria.andIndexScoreBetween(from, to);
         }
-        criteria.andAnnualStateEqualTo(2).andStatusEqualTo(0).andDistrictNotEqualTo("52019999").andNameTypeNotEqualTo("8");
+        criteria.andAnnualStateEqualTo(2).andDistrictNotEqualTo("52019999").andNameTypeEqualTo("06");
 
         // 执行查询
         List<EnterpriseInfo> dbList = enterpriseInfoDao.selectByExampleWithPageBounds(example, page);

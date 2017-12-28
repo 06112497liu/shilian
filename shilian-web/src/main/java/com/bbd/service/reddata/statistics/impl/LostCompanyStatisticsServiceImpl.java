@@ -234,8 +234,13 @@ public class LostCompanyStatisticsServiceImpl implements ILostCompanyStatisticsS
         vo.setCompanyName(d.getCompanyName());
         vo.setRegisterNumber(d.getCompanyCreditCode());
         vo.setAddr(d.getAddr());
-        vo.setDistrict(d.getDistrict());
-        vo.setDistrictDesc("贵州省贵阳市" + districtMap.get(d.getDistrict()));
+        String district = d.getDistrict();
+        vo.setDistrict(district);
+        if (!"52019999".equals(district)) {
+            vo.setDistrictDesc("贵州省贵阳市" + districtMap.get(district));
+        } else {
+            vo.setDistrictDesc(districtMap.get(district));
+        }
 
         String pi = d.getPrimaryIndustry();
         vo.setPrimaryIndustry(pi);
