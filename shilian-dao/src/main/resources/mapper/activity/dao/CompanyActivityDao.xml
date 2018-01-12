@@ -53,7 +53,7 @@
         SET s.`company_state` = s.`company_state` + 1
         WHERE s.nbxh = a.nbxh AND a.`type`=4 AND a.`delete_flag`=0 AND s.`activity_year`=#{year} AND
         s.`activity_month`=#{month}
-    </update>
+    </update>66666
 
     <update id="updateSuspendNotCancelState">
         UPDATE bbd_business_month_statistics s, `bbd_company_info` c
