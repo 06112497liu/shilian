@@ -37,7 +37,7 @@
 
     <!-- 区查询-->
     <select id="selectDistrictByCode" resultMap="SIMap" parameterType="int">
-			select code, name from bbd_district where code = #{code}
+			select code, IF(code = '52019999', "贵州省管辖", name) as name from bbd_district where code = #{code}
 		</select>
 
     <!-- 查询地区的全名和全部区域代码 -->

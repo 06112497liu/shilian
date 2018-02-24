@@ -114,6 +114,50 @@
       #{point,jdbcType=INTEGER}, #{time,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, 
       #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
+  <update id="updateByExampleSelective" parameterType="map">
+    update bbd_task_execute_record
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.year != null">
+        year = #{record.year,jdbcType=INTEGER},
+      </if>
+      <if test="record.month != null">
+        month = #{record.month,jdbcType=INTEGER},
+      </if>
+      <if test="record.day != null">
+        day = #{record.day,jdbcType=INTEGER},
+      </if>
+      <if test="record.hour != null">
+        hour = #{record.hour,jdbcType=INTEGER},
+      </if>
+      <if test="record.minute != null">
+        minute = #{record.minute,jdbcType=INTEGER},
+      </if>
+      <if test="record.point != null">
+        point = #{record.point,jdbcType=INTEGER},
+      </if>
+      <if test="record.time != null">
+        time = #{record.time,jdbcType=INTEGER},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
   <insert id="insertSelective" parameterType="com.bbd.domain.TaskExecuteRecordInfo">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
@@ -190,50 +234,6 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByExampleSelective" parameterType="map">
-    update bbd_task_execute_record
-    <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.state != null">
-        state = #{record.state,jdbcType=INTEGER},
-      </if>
-      <if test="record.year != null">
-        year = #{record.year,jdbcType=INTEGER},
-      </if>
-      <if test="record.month != null">
-        month = #{record.month,jdbcType=INTEGER},
-      </if>
-      <if test="record.day != null">
-        day = #{record.day,jdbcType=INTEGER},
-      </if>
-      <if test="record.hour != null">
-        hour = #{record.hour,jdbcType=INTEGER},
-      </if>
-      <if test="record.minute != null">
-        minute = #{record.minute,jdbcType=INTEGER},
-      </if>
-      <if test="record.point != null">
-        point = #{record.point,jdbcType=INTEGER},
-      </if>
-      <if test="record.time != null">
-        time = #{record.time,jdbcType=INTEGER},
-      </if>
-      <if test="record.gmtCreate != null">
-        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.gmtModified != null">
-        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
   <update id="updateByExample" parameterType="map">
     update bbd_task_execute_record
     set id = #{record.id,jdbcType=INTEGER},
